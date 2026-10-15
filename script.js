@@ -36,7 +36,7 @@ function saveToStorage() {
 // ─── TMDB Integration ────────────────────────────────────────────────────────
 
 const TMDB_IMAGE_BASE = 'https://image.tmdb.org/t/p/w342';
-const TMDB_API_KEY = '7a83a495ab184dd3213bec25d3160776';
+const TMDB_TOKEN = 'eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI3YTgzYTQ5NWFiMTg0ZGQzMjEzYmVjMjVkMzE2MDc3NiIsIm5iZiI6MTc0OTk1NDQ3Ni44MTcsInN1YiI6IjY4NGUyZmFjNGEzZTQ0Y2Y2ODI5NGM2OSIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.OGP__W2OeeziBS4zsFtFWxcqnSwb7-IZ_7XUGGLGcGE';
 
 function getTmdbToken() {
     return TMDB_TOKEN;
@@ -99,10 +99,13 @@ function setupTmdbSearch() {
 }
 
 function searchTmdb(query) {
+    const token = getTmdbToken();
     // Always use multi search to show both movies and TV shows in dropdown
-    const endpoint = `https://api.themoviedb.org/3/search/multi?api_key=${TMDB_API_KEY}&query=${encodeURIComponent(query)}&page=1`;
+    const endpoint = `https://api.themoviedb.org/3/search/multi?query=${encodeURIComponent(query)}&page=1`;
 
-    fetch(endpoint)
+    fetch(endpoint, {
+        headers: { 'Authorization': `Bearer ${token}` }
+    })
     .then(r => r.json())
     .then(data => {
         const results = (data.results || [])

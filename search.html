@@ -593,7 +593,7 @@
     </style>
 
     <script>
-    const TMDB_API_KEY = '7a83a495ab184dd3213bec25d3160776';
+    const TMDB_TOKEN = 'eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI3YTgzYTQ5NWFiMTg0ZGQzMjEzYmVjMjVkMzE2MDc3NiIsIm5iZiI6MTc0OTk1NDQ3Ni44MTcsInN1YiI6IjY4NGUyZmFjNGEzZTQ0Y2Y2ODI5NGM2OSIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.OGP__W2OeeziBS4zsFtFWxcqnSwb7-IZ_7XUGGLGcGE';
     const IMG_BASE = 'https://image.tmdb.org/t/p/w342';
     const IMG_FULL = 'https://image.tmdb.org/t/p/w500';
 
@@ -677,13 +677,13 @@
         if (currentQuery.trim()) {
             // Search mode
             const type = currentType === 'multi' ? 'multi' : currentType;
-            let url = `https://api.themoviedb.org/3/search/${type}?api_key=${TMDB_API_KEY}&query=${encodeURIComponent(currentQuery)}&page=${currentPage}`;
+            let url = `https://api.themoviedb.org/3/search/${type}?query=${encodeURIComponent(currentQuery)}&page=${currentPage}`;
             if (currentYear) url += `&year=${currentYear}`;
             return url;
         } else {
             // Discover mode
             const type = currentType === 'multi' ? 'movie' : currentType;
-            let url = `https://api.themoviedb.org/3/discover/${type}?api_key=${TMDB_API_KEY}&sort_by=${currentSort}&page=${currentPage}`;
+            let url = `https://api.themoviedb.org/3/discover/${type}?sort_by=${currentSort}&page=${currentPage}`;
             if (currentGenre) url += `&with_genres=${currentGenre}`;
             if (currentYear) {
                 if (type === 'movie') url += `&primary_release_year=${currentYear}`;
@@ -701,7 +701,7 @@
         grid.innerHTML = '';
         document.getElementById('browsePagination').innerHTML = '';
 
-        fetch(buildEndpoint())
+        fetch(buildEndpoint(), { headers: { 'Authorization': `Bearer ${TMDB_TOKEN}` } })
             .then(r => r.json())
             .then(data => {
                 const results = (data.results || []).filter(r => r.media_type !== 'person');
@@ -776,10 +776,10 @@
 
     function openBrowseDetail(id, type) {
         const endpoint = type === 'movie'
-            ? `https://api.themoviedb.org/3/movie/${id}?api_key=${TMDB_API_KEY}`
-            : `https://api.themoviedb.org/3/tv/${id}?api_key=${TMDB_API_KEY}`;
+            ? `https://api.themoviedb.org/3/movie/${id}`
+            : `https://api.themoviedb.org/3/tv/${id}`;
 
-        fetch(endpoint)
+        fetch(endpoint, { headers: { 'Authorization': `Bearer ${TMDB_TOKEN}` } })
             .then(r => r.json())
             .then(d => {
                 pendingAddResult = { details: d, type };
