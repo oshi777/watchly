@@ -17,12 +17,12 @@
 
         body {
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-            background: #0B0C0E;
-            color: #F2F4F7;
+            background: #000000;
+            color: #FFFFFF;
             overflow-x: hidden;
         }
 
-        /* Animated Background */
+        /* Animated Background with Gradient Mesh */
         .animated-bg {
             position: fixed;
             top: 0;
@@ -31,17 +31,60 @@
             height: 100%;
             z-index: 0;
             overflow: hidden;
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 100%);
         }
 
-        .animated-bg::before {
-            content: '';
+        .gradient-orbs {
             position: absolute;
-            top: 0;
-            left: 0;
             width: 100%;
             height: 100%;
-            background: linear-gradient(180deg, rgba(11,12,14,0.3) 0%, rgba(11,12,14,0.85) 50%, rgba(11,12,14,0.98) 100%);
-            z-index: 2;
+        }
+
+        .orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(80px);
+            opacity: 0.4;
+            animation: float 20s infinite ease-in-out;
+        }
+
+        .orb:nth-child(1) {
+            width: 500px;
+            height: 500px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            top: -10%;
+            left: -10%;
+            animation-delay: 0s;
+        }
+
+        .orb:nth-child(2) {
+            width: 400px;
+            height: 400px;
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            top: 50%;
+            right: -10%;
+            animation-delay: -5s;
+        }
+
+        .orb:nth-child(3) {
+            width: 450px;
+            height: 450px;
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            bottom: -10%;
+            left: 30%;
+            animation-delay: -10s;
+        }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translate(0, 0) scale(1);
+            }
+            33% {
+                transform: translate(30px, -50px) scale(1.1);
+            }
+            66% {
+                transform: translate(-20px, 30px) scale(0.9);
+            }
         }
 
         .posters-grid {
@@ -52,9 +95,21 @@
             height: 100%;
             display: grid;
             grid-template-columns: repeat(8, 1fr);
-            gap: 8px;
-            padding: 8px;
-            animation: scrollUp 120s linear infinite;
+            gap: 12px;
+            padding: 12px;
+            opacity: 0.15;
+        }
+
+        .poster-column {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            animation: scrollUp 100s linear infinite;
+        }
+
+        .poster-column:nth-child(even) {
+            animation-direction: reverse;
+            animation-duration: 110s;
         }
 
         @keyframes scrollUp {
@@ -66,19 +121,12 @@
             }
         }
 
-        .poster-column {
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-        }
-
         .poster-item {
             width: 100%;
             aspect-ratio: 2/3;
-            border-radius: 8px;
+            border-radius: 12px;
             overflow: hidden;
-            opacity: 0.4;
-            transition: opacity 0.5s ease;
+            transition: all 0.3s ease;
         }
 
         .poster-item img {
@@ -96,139 +144,220 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            padding: 40px 20px;
+            padding: 60px 20px;
+        }
+
+        /* Glassmorphism Hero Card */
+        .hero-card {
+            max-width: 1000px;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 32px;
+            padding: 80px 60px;
+            text-align: center;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+            animation: fadeInScale 0.8s ease;
+        }
+
+        @keyframes fadeInScale {
+            from {
+                opacity: 0;
+                transform: scale(0.95);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
         }
 
         .logo {
-            font-size: 4rem;
+            font-size: 5rem;
             font-weight: 900;
-            letter-spacing: -2px;
-            margin-bottom: 20px;
-            background: linear-gradient(135deg, #F2F4F7 0%, #C3C7CE 100%);
+            letter-spacing: -3px;
+            margin-bottom: 24px;
+            background: linear-gradient(135deg, #FFFFFF 0%, #A0A0A0 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
-            animation: fadeInDown 0.8s ease;
-        }
-
-        @keyframes fadeInDown {
-            from {
-                opacity: 0;
-                transform: translateY(-30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+            text-shadow: 0 0 40px rgba(255, 255, 255, 0.2);
         }
 
         .tagline {
-            font-size: 1.5rem;
-            font-weight: 300;
-            color: #C3C7CE;
-            text-align: center;
-            margin-bottom: 50px;
-            max-width: 600px;
-            line-height: 1.6;
-            animation: fadeInUp 0.8s ease 0.2s both;
+            font-size: 1.6rem;
+            font-weight: 400;
+            color: rgba(255, 255, 255, 0.8);
+            margin-bottom: 16px;
+            line-height: 1.5;
         }
 
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+        .sub-tagline {
+            font-size: 1.1rem;
+            font-weight: 300;
+            color: rgba(255, 255, 255, 0.6);
+            margin-bottom: 50px;
+            line-height: 1.6;
         }
 
         .cta-container {
             display: flex;
-            flex-direction: column;
             gap: 20px;
-            align-items: center;
-            animation: fadeInUp 0.8s ease 0.4s both;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-bottom: 40px;
         }
 
         .cta-button {
-            padding: 18px 50px;
+            padding: 18px 48px;
             font-size: 1.1rem;
             font-weight: 700;
             border: none;
-            border-radius: 12px;
+            border-radius: 16px;
             cursor: pointer;
             transition: all 0.3s ease;
             text-decoration: none;
-            display: inline-block;
-            letter-spacing: 0.5px;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            letter-spacing: 0.3px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cta-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .cta-button:hover::before {
+            left: 100%;
         }
 
         .primary-btn {
-            background: linear-gradient(135deg, #F2F4F7 0%, #C3C7CE 100%);
-            color: #0B0C0E;
-            box-shadow: 0 10px 30px rgba(242,244,247,0.3);
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #FFFFFF;
+            box-shadow: 0 8px 24px rgba(102, 126, 234, 0.4);
         }
 
         .primary-btn:hover {
             transform: translateY(-3px);
-            box-shadow: 0 15px 40px rgba(242,244,247,0.4);
+            box-shadow: 0 12px 32px rgba(102, 126, 234, 0.5);
         }
 
         .secondary-btn {
-            background: transparent;
-            color: #F2F4F7;
-            border: 2px solid #C3C7CE;
+            background: rgba(255, 255, 255, 0.1);
+            color: #FFFFFF;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
         }
 
         .secondary-btn:hover {
-            background: rgba(195,199,206,0.1);
-            border-color: #F2F4F7;
+            background: rgba(255, 255, 255, 0.15);
+            border-color: rgba(255, 255, 255, 0.3);
         }
 
-        .features {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 30px;
-            max-width: 1000px;
-            margin-top: 80px;
-            animation: fadeInUp 0.8s ease 0.6s both;
+        /* Stats Section */
+        .stats {
+            display: flex;
+            gap: 60px;
+            justify-content: center;
+            padding-top: 40px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            flex-wrap: wrap;
         }
 
-        .feature {
+        .stat-item {
             text-align: center;
-            padding: 30px;
-            background: rgba(30,33,38,0.6);
-            border-radius: 16px;
-            border: 1px solid rgba(195,199,206,0.1);
-            backdrop-filter: blur(10px);
-            transition: all 0.3s ease;
         }
 
-        .feature:hover {
-            transform: translateY(-5px);
-            border-color: rgba(195,199,206,0.3);
-            background: rgba(30,33,38,0.8);
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 8px;
+        }
+
+        .stat-label {
+            font-size: 0.95rem;
+            color: rgba(255, 255, 255, 0.6);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 600;
+        }
+
+        /* Features Grid */
+        .features-section {
+            max-width: 1200px;
+            width: 100%;
+            margin-top: 100px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 32px;
+        }
+
+        .feature-card {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 24px;
+            padding: 40px 32px;
+            text-align: left;
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+            transform: translateX(-100%);
+            transition: transform 0.6s ease;
+        }
+
+        .feature-card:hover::before {
+            transform: translateX(0);
+        }
+
+        .feature-card:hover {
+            transform: translateY(-8px);
+            border-color: rgba(255, 255, 255, 0.15);
+            background: rgba(255, 255, 255, 0.05);
+            box-shadow: 0 16px 48px rgba(0, 0, 0, 0.4);
         }
 
         .feature-icon {
-            font-size: 3rem;
-            margin-bottom: 15px;
-            filter: grayscale(30%);
+            font-size: 3.5rem;
+            margin-bottom: 24px;
+            display: inline-block;
+            filter: grayscale(0);
         }
 
-        .feature h3 {
-            font-size: 1.3rem;
+        .feature-title {
+            font-size: 1.5rem;
             font-weight: 700;
-            margin-bottom: 10px;
-            color: #F2F4F7;
+            margin-bottom: 12px;
+            color: #FFFFFF;
         }
 
-        .feature p {
-            font-size: 0.95rem;
-            color: #C3C7CE;
-            line-height: 1.6;
+        .feature-description {
+            font-size: 1.05rem;
+            color: rgba(255, 255, 255, 0.7);
+            line-height: 1.7;
         }
 
         /* Loading State */
@@ -238,96 +367,175 @@
             left: 50%;
             transform: translate(-50%, -50%);
             font-size: 1.2rem;
-            color: #C3C7CE;
+            color: rgba(255, 255, 255, 0.6);
             z-index: 1;
         }
 
         /* Mobile Responsive */
+        @media (max-width: 1024px) {
+            .posters-grid {
+                grid-template-columns: repeat(6, 1fr);
+            }
+        }
+
         @media (max-width: 768px) {
             .posters-grid {
                 grid-template-columns: repeat(4, 1fr);
-                gap: 6px;
-                padding: 6px;
+                gap: 8px;
+            }
+
+            .hero-card {
+                padding: 50px 30px;
             }
 
             .logo {
-                font-size: 3rem;
+                font-size: 3.5rem;
             }
 
             .tagline {
-                font-size: 1.2rem;
-                margin-bottom: 40px;
+                font-size: 1.3rem;
+            }
+
+            .sub-tagline {
+                font-size: 1rem;
             }
 
             .cta-button {
-                padding: 15px 40px;
+                padding: 16px 36px;
                 font-size: 1rem;
-                width: 100%;
-                max-width: 300px;
             }
 
-            .features {
+            .stats {
+                gap: 40px;
+            }
+
+            .stat-number {
+                font-size: 2rem;
+            }
+
+            .features-section {
                 grid-template-columns: 1fr;
-                gap: 20px;
                 margin-top: 60px;
+                gap: 24px;
             }
 
-            .feature {
-                padding: 25px;
+            .feature-card {
+                padding: 32px 24px;
             }
         }
 
         @media (max-width: 480px) {
             .posters-grid {
                 grid-template-columns: repeat(3, 1fr);
-                gap: 4px;
-                padding: 4px;
+                gap: 6px;
+            }
+
+            .hero-card {
+                padding: 40px 24px;
+                border-radius: 24px;
             }
 
             .logo {
-                font-size: 2.5rem;
+                font-size: 2.8rem;
+                letter-spacing: -2px;
             }
 
             .tagline {
-                font-size: 1rem;
+                font-size: 1.1rem;
             }
 
-            .content {
-                padding: 30px 15px;
+            .sub-tagline {
+                font-size: 0.9rem;
+                margin-bottom: 40px;
+            }
+
+            .cta-container {
+                flex-direction: column;
+                width: 100%;
+            }
+
+            .cta-button {
+                width: 100%;
+                justify-content: center;
+            }
+
+            .stats {
+                flex-direction: column;
+                gap: 30px;
+            }
+
+            .feature-icon {
+                font-size: 3rem;
+            }
+
+            .feature-title {
+                font-size: 1.3rem;
+            }
+
+            .feature-description {
+                font-size: 0.95rem;
             }
         }
     </style>
 </head>
 <body>
     <div class="animated-bg">
-        <div class="loading" id="loading">Loading amazing content...</div>
+        <div class="gradient-orbs">
+            <div class="orb"></div>
+            <div class="orb"></div>
+            <div class="orb"></div>
+        </div>
+        <div class="loading" id="loading">Loading...</div>
         <div class="posters-grid" id="postersGrid"></div>
     </div>
 
     <div class="content">
-        <h1 class="logo">Watchly</h1>
-        <p class="tagline">Track what you watch. Remember what you love. Never miss a show or movie again.</p>
-        
-        <div class="cta-container">
-            <a href="index.html" class="cta-button primary-btn">Get Started</a>
-            <a href="guide.html" class="cta-button secondary-btn">Learn More</a>
+        <div class="hero-card">
+            <h1 class="logo">Watchly</h1>
+            <p class="tagline">Your personal entertainment companion</p>
+            <p class="sub-tagline">Track what you watch. Create rankings. Sync across devices. Never forget a show or movie again.</p>
+            
+            <div class="cta-container">
+                <a href="index.html" class="cta-button primary-btn">
+                    <span>Get Started Free</span>
+                    <span>→</span>
+                </a>
+                <a href="guide.html" class="cta-button secondary-btn">
+                    <span>Learn More</span>
+                </a>
+            </div>
+
+            <div class="stats">
+                <div class="stat-item">
+                    <div class="stat-number">∞</div>
+                    <div class="stat-label">Shows & Movies</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">100%</div>
+                    <div class="stat-label">Free Forever</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">☁️</div>
+                    <div class="stat-label">Auto Backup</div>
+                </div>
+            </div>
         </div>
 
-        <div class="features">
-            <div class="feature">
+        <div class="features-section">
+            <div class="feature-card">
                 <div class="feature-icon">🎬</div>
-                <h3>Track Everything</h3>
-                <p>Keep tabs on all your favorite movies and TV shows in one beautiful place</p>
+                <h3 class="feature-title">Track Everything</h3>
+                <p class="feature-description">Keep your entire watchlist organized in one beautiful place. Movies, TV shows, anime - track it all with ease.</p>
             </div>
-            <div class="feature">
+            <div class="feature-card">
                 <div class="feature-icon">📊</div>
-                <h3>Personal Rankings</h3>
-                <p>Create your ultimate leaderboard and rank your favorites from best to worst</p>
+                <h3 class="feature-title">Create Rankings</h3>
+                <p class="feature-description">Build your ultimate leaderboard. Rank your favorites, compare shows, and see your top picks at a glance.</p>
             </div>
-            <div class="feature">
+            <div class="feature-card">
                 <div class="feature-icon">☁️</div>
-                <h3>Auto Backup</h3>
-                <p>Your watchlist syncs automatically to GitHub Gist. Access anywhere, anytime</p>
+                <h3 class="feature-title">Auto Sync</h3>
+                <p class="feature-description">Your data automatically backs up to GitHub Gist. Access your watchlist from any device, anytime.</p>
             </div>
         </div>
     </div>
@@ -340,27 +548,24 @@
             try {
                 const headers = { 'Authorization': `Bearer ${TMDB_TOKEN}` };
                 
-                // Fetch trending, popular movies, and popular TV shows
                 const [trending, popularMovies, popularTV] = await Promise.all([
                     fetch('https://api.themoviedb.org/3/trending/all/week', { headers }).then(r => r.json()),
                     fetch('https://api.themoviedb.org/3/movie/popular', { headers }).then(r => r.json()),
                     fetch('https://api.themoviedb.org/3/tv/popular', { headers }).then(r => r.json())
                 ]);
 
-                // Combine all results and shuffle
                 const allItems = [
                     ...trending.results,
                     ...popularMovies.results,
                     ...popularTV.results
                 ].filter(item => item.poster_path);
 
-                // Shuffle array
                 for (let i = allItems.length - 1; i > 0; i--) {
                     const j = Math.floor(Math.random() * (i + 1));
                     [allItems[i], allItems[j]] = [allItems[j], allItems[i]];
                 }
 
-                return allItems.slice(0, 80); // Get 80 posters
+                return allItems.slice(0, 96);
             } catch (error) {
                 console.error('Error fetching posters:', error);
                 return [];
@@ -371,12 +576,10 @@
             const grid = document.getElementById('postersGrid');
             grid.innerHTML = '';
 
-            const isMobile = window.innerWidth <= 768;
-            const isSmallMobile = window.innerWidth <= 480;
-            const columns = isSmallMobile ? 3 : (isMobile ? 4 : 8);
+            const width = window.innerWidth;
+            const columns = width <= 480 ? 3 : (width <= 768 ? 4 : (width <= 1024 ? 6 : 8));
             const postersPerColumn = Math.ceil(posters.length / columns);
 
-            // Duplicate posters for seamless loop
             const duplicatedPosters = [...posters, ...posters];
 
             for (let col = 0; col < columns; col++) {
@@ -402,28 +605,23 @@
                 grid.appendChild(column);
             }
 
-            // Hide loading
             document.getElementById('loading').style.display = 'none';
         }
 
-        // Initialize
         fetchPosters().then(posters => {
             if (posters.length > 0) {
                 createPosterColumns(posters);
             } else {
-                document.getElementById('loading').textContent = 'Welcome to Watchly';
+                document.getElementById('loading').textContent = 'Welcome';
             }
         });
 
-        // Recreate grid on resize for responsive column count
         let resizeTimer;
         window.addEventListener('resize', () => {
             clearTimeout(resizeTimer);
             resizeTimer = setTimeout(() => {
                 fetchPosters().then(posters => {
-                    if (posters.length > 0) {
-                        createPosterColumns(posters);
-                    }
+                    if (posters.length > 0) createPosterColumns(posters);
                 });
             }, 500);
         });
