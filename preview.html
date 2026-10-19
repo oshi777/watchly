@@ -139,7 +139,7 @@
         .btn-primary {
             padding: 16px 48px;
             background: var(--light);
-            color: var(--dark);
+            color: var(--dark) !important;
             border: none;
             border-radius: 10px;
             font-size: 1.1rem;
@@ -184,7 +184,9 @@
         }
 
         .feature-card {
-            background: var(--surface);
+            background: rgba(30, 33, 38, 0.4);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
             border: 1px solid rgba(195,199,206,0.1);
             border-radius: 20px;
             padding: 48px 36px;
@@ -212,6 +214,7 @@
 
         .feature-card:hover {
             transform: translateY(-8px);
+            background: rgba(30, 33, 38, 0.6);
             border-color: rgba(195,199,206,0.25);
             box-shadow: 0 12px 40px rgba(0,0,0,0.4);
         }
