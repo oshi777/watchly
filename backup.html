@@ -392,16 +392,24 @@
             storageUsedElement.textContent = usageText;
             storageUsedElement.className = usageClass;
 
+            // Calculate estimated capacity
+            const watchlistData = JSON.parse(localStorage.getItem('watchlistData') || '[]');
+            const currentEntries = watchlistData.length;
+            const avgBytesPerEntry = currentEntries > 0 ? storageUsed / currentEntries : 2000; // Default ~2KB per entry
+            const remainingBytes = storageLimit - storageUsed;
+            const estimatedRemainingEntries = Math.floor(remainingBytes / avgBytesPerEntry);
+            const totalCapacityEntries = Math.floor(storageLimit / avgBytesPerEntry);
+
             // Show warning if approaching limit
+            const limitElement = document.getElementById('storageLimit');
             if (usagePercentage > 80) {
-                const limitElement = document.getElementById('storageLimit');
                 if (usagePercentage > 90) {
-                    limitElement.innerHTML = '100 MB (GitHub Gist Limit)<br><small style="color: #dc3545;">⚠️ Near limit!</small>';
+                    limitElement.innerHTML = `100 MB (GitHub Gist Limit)<br><small style="color: #dc3545;">⚠️ Near limit! ~${estimatedRemainingEntries} entries left</small>`;
                 } else {
-                    limitElement.innerHTML = '100 MB (GitHub Gist Limit)<br><small style="color: #ffc107;">⚠️ 80%+ used</small>';
+                    limitElement.innerHTML = `100 MB (GitHub Gist Limit)<br><small style="color: #ffc107;">⚠️ ~${estimatedRemainingEntries} entries remaining</small>`;
                 }
             } else {
-                document.getElementById('storageLimit').innerHTML = '100 MB (GitHub Gist Limit)';
+                limitElement.innerHTML = `100 MB (GitHub Gist Limit)<br><small style="color: var(--silver); opacity: 0.7;">~${totalCapacityEntries.toLocaleString()} total entries capacity</small>`;
             }
         }
 
