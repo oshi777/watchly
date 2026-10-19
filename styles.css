@@ -346,6 +346,11 @@ header p {
     cursor: pointer;
     transition: all 0.3s ease;
     font-family: 'Inter', sans-serif;
+    text-transform: uppercase;
+}
+
+.filters select option {
+    text-transform: uppercase;
 }
 
 .filters select:hover {
@@ -401,7 +406,7 @@ header p {
     justify-content: center;
     gap: 40px;
     margin-bottom: 40px;
-    padding: 28px 20px;
+    padding: 20px;
     border-bottom: 2px solid rgba(195,199,206,0.15);
 }
 
@@ -433,7 +438,7 @@ header p {
 /* Currently Watching Section */
 .currently-watching-section {
     margin-bottom: 40px;
-    padding: 30px 20px;
+    padding: 20px;
     border-bottom: 2px solid rgba(195,199,206,0.15);
 }
 
