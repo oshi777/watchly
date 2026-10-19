@@ -192,10 +192,20 @@
 
         .entry-date {
             font-size: 0.8rem;
-            color: var(--muted);
+            color: var(--silver);
             white-space: nowrap;
             flex-shrink: 0;
             padding-top: 2px;
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+            align-items: flex-end;
+        }
+
+        .entry-time {
+            font-size: 0.7rem;
+            color: var(--muted);
+            opacity: 0.7;
         }
 
         .entry-genres {
@@ -454,13 +464,28 @@
                 const genresHtml = entry.genres.length
                     ? `<div class="entry-genres">${entry.genres.map(g => `<span class="genre-tag">${g}</span>`).join('')}</div>`
                     : '';
+                
+                // Format time if addedAt timestamp exists
+                let timeHtml = '';
+                if (entry.addedAt && entry.addedAt > 0) {
+                    const date = new Date(entry.addedAt);
+                    const hours = date.getHours();
+                    const minutes = date.getMinutes();
+                    const ampm = hours >= 12 ? 'PM' : 'AM';
+                    const displayHours = hours % 12 || 12;
+                    const displayMinutes = minutes.toString().padStart(2, '0');
+                    timeHtml = `<div class="entry-time">${displayHours}:${displayMinutes} ${ampm}</div>`;
+                }
 
                 card.innerHTML = `
                     <div class="entry-top">
                         <div>
                             <div class="entry-title">${entry.title}${badgeHtml}</div>
                         </div>
-                        <div class="entry-date">${formatDisplayDate(entry.date)}</div>
+                        <div class="entry-date">
+                            <div>${formatDisplayDate(entry.date)}</div>
+                            ${timeHtml}
+                        </div>
                     </div>
                     ${genresHtml}
                 `;
