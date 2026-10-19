@@ -147,9 +147,7 @@
             cursor: pointer;
             transition: all 0.3s ease;
             text-decoration: none;
-            display: inline-flex;
-            align-items: center;
-            gap: 10px;
+            display: inline-block;
         }
 
         .btn-primary:hover {
@@ -168,9 +166,7 @@
             cursor: pointer;
             transition: all 0.3s ease;
             text-decoration: none;
-            display: inline-flex;
-            align-items: center;
-            gap: 10px;
+            display: inline-block;
         }
 
         .btn-secondary:hover {
@@ -189,36 +185,66 @@
 
         .feature-card {
             background: var(--surface);
-            border: 1px solid rgba(195,199,206,0.08);
-            border-radius: 16px;
-            padding: 40px 32px;
+            border: 1px solid rgba(195,199,206,0.1);
+            border-radius: 20px;
+            padding: 48px 36px;
             text-align: center;
-            transition: all 0.3s ease;
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--light) 0%, var(--silver) 100%);
+            transform: scaleX(0);
+            transition: transform 0.4s ease;
+        }
+
+        .feature-card:hover::before {
+            transform: scaleX(1);
         }
 
         .feature-card:hover {
-            transform: translateY(-5px);
-            border-color: rgba(195,199,206,0.2);
-            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            transform: translateY(-8px);
+            border-color: rgba(195,199,206,0.25);
+            box-shadow: 0 12px 40px rgba(0,0,0,0.4);
         }
 
         .feature-icon {
-            font-size: 3.5rem;
-            margin-bottom: 24px;
-            line-height: 1;
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 28px;
+            background: rgba(195,199,206,0.08);
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.2rem;
+            transition: all 0.3s ease;
+        }
+
+        .feature-card:hover .feature-icon {
+            background: rgba(195,199,206,0.15);
+            transform: scale(1.05);
         }
 
         .feature-title {
-            font-size: 1.4rem;
+            font-size: 1.5rem;
             font-weight: 700;
             color: var(--light);
-            margin-bottom: 12px;
+            margin-bottom: 16px;
         }
 
         .feature-description {
-            font-size: 1rem;
+            font-size: 1.05rem;
             color: var(--silver);
-            line-height: 1.7;
+            line-height: 1.8;
         }
 
         /* Loading state */
@@ -300,7 +326,9 @@
             }
 
             .feature-icon {
-                font-size: 3rem;
+                width: 70px;
+                height: 70px;
+                font-size: 2rem;
             }
         }
     </style>
@@ -330,26 +358,47 @@
 
             <div class="features">
                 <div class="feature-card">
-                    <div class="feature-icon">🎬</div>
+                    <div class="feature-icon">
+                        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: var(--silver);">
+                            <rect x="2" y="2" width="20" height="20" rx="2.18" ry="2.18"/>
+                            <line x1="7" y1="2" x2="7" y2="22"/>
+                            <line x1="17" y1="2" x2="17" y2="22"/>
+                            <line x1="2" y1="12" x2="22" y2="12"/>
+                            <line x1="2" y1="7" x2="7" y2="7"/>
+                            <line x1="2" y1="17" x2="7" y2="17"/>
+                            <line x1="17" y1="17" x2="22" y2="17"/>
+                            <line x1="17" y1="7" x2="22" y2="7"/>
+                        </svg>
+                    </div>
                     <h3 class="feature-title">Track Everything</h3>
                     <p class="feature-description">
-                        Organize all your movies and TV shows in one beautiful, easy-to-use interface.
+                        Organize all your movies and TV shows in one beautiful, easy-to-use interface with powerful search and filters.
                     </p>
                 </div>
 
                 <div class="feature-card">
-                    <div class="feature-icon">📊</div>
+                    <div class="feature-icon">
+                        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: var(--silver);">
+                            <line x1="18" y1="20" x2="18" y2="10"/>
+                            <line x1="12" y1="20" x2="12" y2="4"/>
+                            <line x1="6" y1="20" x2="6" y2="14"/>
+                        </svg>
+                    </div>
                     <h3 class="feature-title">Create Rankings</h3>
                     <p class="feature-description">
-                        Build your personal leaderboard and rank your favorites from best to worst.
+                        Build your personal leaderboard and rank your favorites. See your top picks at a glance and share with friends.
                     </p>
                 </div>
 
                 <div class="feature-card">
-                    <div class="feature-icon">☁️</div>
+                    <div class="feature-icon">
+                        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: var(--silver);">
+                            <path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"/>
+                        </svg>
+                    </div>
                     <h3 class="feature-title">Auto Sync</h3>
                     <p class="feature-description">
-                        Your watchlist automatically backs up to GitHub. Access from anywhere, anytime.
+                        Your watchlist automatically backs up to GitHub Gist. Access from any device, anytime, anywhere.
                     </p>
                 </div>
             </div>
