@@ -837,6 +837,7 @@ function handleAddShow(e) {
     const tmdbOverview = document.getElementById('newTitle').dataset.tmdbOverview || '';
     if (tmdbOverview) itemData.overview = tmdbOverview;
     
+    // Handle date - if status is "watched" and no date provided, auto-set to today
     if (date) {
         if (dateType === 'year') {
             itemData.date = date; // just the year string e.g. "2023"
@@ -847,6 +848,13 @@ function handleAddShow(e) {
                 day: 'numeric'
             });
         }
+    } else if (status === 'watched') {
+        // Auto-set date to today if marking as watched without a date
+        itemData.date = new Date().toLocaleDateString('en-US', {
+            year: 'numeric',
+            month: 'short',
+            day: 'numeric'
+        });
     }
     
     if (editIndex !== undefined) {
