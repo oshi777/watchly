@@ -504,19 +504,68 @@
         }
 
         .mockup-header {
+            text-align: center;
             margin-bottom: 30px;
+            padding: 30px 20px;
+            border-bottom: 2px solid rgba(195,199,206,0.15);
         }
 
         .mockup-title {
-            font-size: 2rem;
-            font-weight: 800;
+            font-size: 3rem;
+            font-weight: 700;
             color: var(--light);
-            margin-bottom: 4px;
+            margin-bottom: 10px;
         }
 
         .mockup-subtitle {
-            font-size: 0.95rem;
+            font-size: 1.3rem;
             color: var(--silver);
+            margin-bottom: 30px;
+            font-weight: 300;
+        }
+
+        .mockup-search-container {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .mockup-search-input {
+            width: 100%;
+            padding: 16px 20px;
+            font-size: 1rem;
+            border: 1px solid rgba(195,199,206,0.2);
+            border-radius: 10px;
+            background-color: var(--surface);
+            color: var(--light);
+            margin-bottom: 20px;
+        }
+
+        .mockup-filters {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .mockup-filters select,
+        .mockup-filters button {
+            padding: 10px 16px;
+            border: 1px solid rgba(195,199,206,0.2);
+            border-radius: 8px;
+            background-color: var(--surface);
+            color: var(--light);
+            font-size: 0.9rem;
+            cursor: pointer;
+            font-family: 'Inter', sans-serif;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .mockup-filters select:hover,
+        .mockup-filters button:hover {
+            border-color: var(--silver);
+            background: var(--muted);
         }
 
         .mockup-stats {
@@ -647,13 +696,28 @@
                 padding: 30px 16px;
             }
 
+            .mockup-title {
+                font-size: 2rem;
+            }
+
+            .mockup-subtitle {
+                font-size: 1.1rem;
+            }
+
+            .mockup-filters {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 10px;
+            }
+
+            .mockup-filters select,
+            .mockup-filters button {
+                width: 100%;
+            }
+
             .mockup-grid {
                 grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
                 gap: 16px;
-            }
-
-            .mockup-title {
-                font-size: 1.6rem;
             }
 
             .mockup-stats {
@@ -667,6 +731,25 @@
         }
 
         @media (max-width: 480px) {
+            .mockup-title {
+                font-size: 1.3rem;
+            }
+
+            .mockup-subtitle {
+                font-size: 0.75rem;
+            }
+
+            .mockup-search-input {
+                padding: 8px 10px;
+                font-size: 16px;
+            }
+
+            .mockup-filters {
+                display: flex;
+                flex-direction: column;
+                gap: 6px;
+            }
+
             .mockup-grid {
                 grid-template-columns: repeat(2, 1fr);
                 gap: 12px;
@@ -735,8 +818,23 @@
 
             mockupContainer.innerHTML = `
                 <div class="mockup-header">
-                    <h2 class="mockup-title">Watchly</h2>
+                    <h1 class="mockup-title">Watchly</h1>
                     <p class="mockup-subtitle">Track, Organize, Discover</p>
+                    <div class="mockup-search-container">
+                        <input type="text" class="mockup-search-input" placeholder="Search movies and shows..." disabled>
+                        <div class="mockup-filters">
+                            <select disabled>
+                                <option>All Status</option>
+                            </select>
+                            <select disabled>
+                                <option>All Genres</option>
+                            </select>
+                            <button>+ Add Show</button>
+                            <button>Export</button>
+                            <button>Import</button>
+                            <button>Reset All</button>
+                        </div>
+                    </div>
                 </div>
                 
                 <div class="mockup-stats">
