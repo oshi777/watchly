@@ -33,6 +33,33 @@ function saveToStorage() {
     markDataChanged();
 }
 
+// Check and update upcoming items that have been released
+function checkUpcomingItems() {
+    let updated = false;
+    const today = new Date();
+    today.setHours(0, 0, 0, 0); // Set to midnight for date-only comparison
+    
+    watchlistData.forEach(item => {
+        if (item.status === 'upcoming' && item.year) {
+            // Parse the release year
+            const releaseYear = parseInt(item.year);
+            const currentYear = today.getFullYear();
+            
+            // If the release year has passed, change status to pending
+            if (releaseYear < currentYear) {
+                item.status = 'pending';
+                updated = true;
+            }
+        }
+    });
+    
+    if (updated) {
+        saveToStorage();
+    }
+    
+    return updated;
+}
+
 // ─── TMDB Integration ────────────────────────────────────────────────────────
 
 const TMDB_IMAGE_BASE = 'https://image.tmdb.org/t/p/w342';
@@ -303,6 +330,13 @@ function initializeApp() {
     } else {
         loadFromStorage();
     }
+    
+    // Check and update upcoming items that have been released
+    const upcomingUpdated = checkUpcomingItems();
+    if (upcomingUpdated) {
+        console.log('Updated released upcoming items to "To Watch"');
+    }
+    
     filteredData = [...watchlistData];
     populateGenreFilter();
     updateStats();
