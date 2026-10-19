@@ -204,8 +204,8 @@
 
         .entry-time {
             font-size: 0.7rem;
-            color: var(--muted);
-            opacity: 0.7;
+            color: var(--silver);
+            opacity: 0.8;
         }
 
         .entry-genres {
@@ -465,16 +465,26 @@
                     ? `<div class="entry-genres">${entry.genres.map(g => `<span class="genre-tag">${g}</span>`).join('')}</div>`
                     : '';
                 
-                // Format time if addedAt timestamp exists
+                // Format time if addedAt timestamp exists, using selected timezone
                 let timeHtml = '';
                 if (entry.addedAt && entry.addedAt > 0) {
                     const date = new Date(entry.addedAt);
-                    const hours = date.getHours();
-                    const minutes = date.getMinutes();
-                    const ampm = hours >= 12 ? 'PM' : 'AM';
-                    const displayHours = hours % 12 || 12;
-                    const displayMinutes = minutes.toString().padStart(2, '0');
-                    timeHtml = `<div class="entry-time">${displayHours}:${displayMinutes} ${ampm}</div>`;
+                    
+                    // Get timezone from settings
+                    const savedTimezone = localStorage.getItem('appTimezone') || 'auto';
+                    const timezone = savedTimezone === 'auto' 
+                        ? Intl.DateTimeFormat().resolvedOptions().timeZone 
+                        : savedTimezone;
+                    
+                    // Format time in selected timezone
+                    const formatter = new Intl.DateTimeFormat('en-US', {
+                        timeZone: timezone,
+                        hour: 'numeric',
+                        minute: '2-digit',
+                        hour12: true
+                    });
+                    
+                    timeHtml = `<div class="entry-time">${formatter.format(date)}</div>`;
                 }
 
                 card.innerHTML = `

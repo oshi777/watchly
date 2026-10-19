@@ -266,7 +266,8 @@ function performAutoBackup(githubToken) {
         listGrouping: localStorage.getItem('listGrouping') || 'continuous',
         quickAccessEnabled: localStorage.getItem('currentlyWatchingEnabled') !== 'false',
         leaderboardEnabled: localStorage.getItem('leaderboardEnabled') !== 'false',
-        backupSyncMode: localStorage.getItem('backupSyncMode') || 'merge'
+        backupSyncMode: localStorage.getItem('backupSyncMode') || 'merge',
+        timezone: localStorage.getItem('appTimezone') || 'auto'
     };
     
     const exportData = {

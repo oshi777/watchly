@@ -205,7 +205,7 @@
         }
 
         .extra-wide-card {
-            grid-column: span 5;
+            grid-column: 1 / -1;
             border-top: 1px solid rgba(195,199,206,0.1);
             padding-top: 30px;
             margin-top: 15px;
@@ -259,51 +259,78 @@
                 padding: 0 4px;
             }
 
-            .backup-card {
-                padding: 20px;
+            .info-grid {
+                grid-template-columns: 1fr;
+                gap: 12px;
             }
 
-            .backup-card h2 {
-                font-size: 1.1rem;
+            .info-card {
+                border-right: none;
+                border-bottom: 1px solid rgba(195,199,206,0.1);
+                padding: 16px;
             }
 
-            .backup-card p {
-                font-size: 0.85rem;
+            .info-card:last-child {
+                border-bottom: none;
             }
 
-            .gist-info {
-                padding: 12px;
+            .extra-wide-card {
+                padding-top: 16px;
+                margin-top: 0;
             }
 
-            .gist-info-item {
-                font-size: 0.8rem;
+            .status-card {
+                padding: 20px 0;
+            }
+
+            .status-indicator {
+                font-size: 1.2rem;
+                padding: 8px 16px;
+            }
+
+            .actions {
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            .actions button {
+                width: 100%;
             }
         }
 
         @media (max-width: 480px) {
-            .backup-card {
-                padding: 16px;
+            .backup-container {
+                padding: 0 4px;
             }
 
-            .backup-card h2 {
+            .status-card {
+                padding: 16px 0;
+            }
+
+            .status-card h3 {
+                font-size: 1.1rem;
+            }
+
+            .status-indicator {
                 font-size: 1rem;
+                padding: 6px 12px;
             }
 
-            .backup-card p {
-                font-size: 0.82rem;
+            .info-card {
+                padding: 12px;
             }
 
-            .backup-actions {
-                flex-direction: column;
-                gap: 8px;
+            .info-card h4 {
+                font-size: 0.9rem;
             }
 
-            .backup-actions button {
-                width: 100%;
+            .info-card div {
+                font-size: 0.95rem;
             }
 
-            .gist-info-item {
-                font-size: 0.75rem;
+            .actions button {
+                font-size: 0.9rem;
+                padding: 10px 20px;
             }
         }
     </style>
@@ -848,6 +875,7 @@
                         localStorage.setItem('leaderboardEnabled', settings.leaderboardEnabled ? 'true' : 'false');
                     }
                     if (settings.backupSyncMode) localStorage.setItem('backupSyncMode', settings.backupSyncMode);
+                    if (settings.timezone) localStorage.setItem('appTimezone', settings.timezone);
                 }
                 
                 // Import quick access order if available

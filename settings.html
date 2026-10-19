@@ -342,6 +342,74 @@
                     </div>
                 </div>
 
+                <!-- Timezone Setting -->
+                <div class="settings-card">
+                    <div class="settings-card-header">
+                        <h3>Timezone</h3>
+                        <p>Choose your timezone for accurate time display in history</p>
+                    </div>
+                    
+                    <div style="display: flex; flex-direction: column; gap: 12px;">
+                        <select id="timezoneSelect" style="padding: 12px; background: var(--surface); color: var(--light); border: 1px solid rgba(195,199,206,0.2); border-radius: 8px; font-size: 1rem; font-family: inherit; cursor: pointer;">
+                            <option value="auto">Auto-detect (Current: <span id="detectedTimezone"></span>)</option>
+                            <optgroup label="Americas">
+                                <option value="America/New_York">Eastern Time (New York)</option>
+                                <option value="America/Chicago">Central Time (Chicago)</option>
+                                <option value="America/Denver">Mountain Time (Denver)</option>
+                                <option value="America/Los_Angeles">Pacific Time (Los Angeles)</option>
+                                <option value="America/Anchorage">Alaska Time (Anchorage)</option>
+                                <option value="America/Honolulu">Hawaii Time (Honolulu)</option>
+                                <option value="America/Toronto">Eastern Time (Toronto)</option>
+                                <option value="America/Vancouver">Pacific Time (Vancouver)</option>
+                                <option value="America/Mexico_City">Central Time (Mexico City)</option>
+                                <option value="America/Sao_Paulo">Brasilia Time</option>
+                                <option value="America/Argentina/Buenos_Aires">Argentina Time</option>
+                            </optgroup>
+                            <optgroup label="Europe">
+                                <option value="Europe/London">London (GMT/BST)</option>
+                                <option value="Europe/Paris">Paris (CET/CEST)</option>
+                                <option value="Europe/Berlin">Berlin (CET/CEST)</option>
+                                <option value="Europe/Madrid">Madrid (CET/CEST)</option>
+                                <option value="Europe/Rome">Rome (CET/CEST)</option>
+                                <option value="Europe/Amsterdam">Amsterdam (CET/CEST)</option>
+                                <option value="Europe/Brussels">Brussels (CET/CEST)</option>
+                                <option value="Europe/Vienna">Vienna (CET/CEST)</option>
+                                <option value="Europe/Stockholm">Stockholm (CET/CEST)</option>
+                                <option value="Europe/Athens">Athens (EET/EEST)</option>
+                                <option value="Europe/Moscow">Moscow (MSK)</option>
+                            </optgroup>
+                            <optgroup label="Asia">
+                                <option value="Asia/Dubai">Dubai (GST)</option>
+                                <option value="Asia/Karachi">Karachi (PKT)</option>
+                                <option value="Asia/Kolkata">India (IST)</option>
+                                <option value="Asia/Dhaka">Bangladesh (BST)</option>
+                                <option value="Asia/Bangkok">Bangkok (ICT)</option>
+                                <option value="Asia/Singapore">Singapore (SGT)</option>
+                                <option value="Asia/Hong_Kong">Hong Kong (HKT)</option>
+                                <option value="Asia/Shanghai">China (CST)</option>
+                                <option value="Asia/Tokyo">Japan (JST)</option>
+                                <option value="Asia/Seoul">South Korea (KST)</option>
+                            </optgroup>
+                            <optgroup label="Oceania">
+                                <option value="Australia/Sydney">Sydney (AEDT/AEST)</option>
+                                <option value="Australia/Melbourne">Melbourne (AEDT/AEST)</option>
+                                <option value="Australia/Brisbane">Brisbane (AEST)</option>
+                                <option value="Australia/Perth">Perth (AWST)</option>
+                                <option value="Pacific/Auckland">Auckland (NZDT/NZST)</option>
+                            </optgroup>
+                            <optgroup label="Africa">
+                                <option value="Africa/Cairo">Cairo (EET)</option>
+                                <option value="Africa/Johannesburg">Johannesburg (SAST)</option>
+                                <option value="Africa/Lagos">Lagos (WAT)</option>
+                                <option value="Africa/Nairobi">Nairobi (EAT)</option>
+                            </optgroup>
+                        </select>
+                        <p style="color: var(--silver); font-size: 0.85rem; margin: 0;">
+                            Current time in selected timezone: <strong id="currentTimeDisplay">--:-- --</strong>
+                        </p>
+                    </div>
+                </div>
+
                 <!-- Trakt.tv Integration -->
                 <div class="settings-card">
                     <div class="settings-card-header">
@@ -1159,6 +1227,57 @@
 
         applySyncModeSelection(getCurrentSyncMode());
 
+        // Timezone functionality
+        function getCurrentTimezone() {
+            return localStorage.getItem('appTimezone') || 'auto';
+        }
+
+        function getEffectiveTimezone() {
+            const saved = getCurrentTimezone();
+            if (saved === 'auto') {
+                return Intl.DateTimeFormat().resolvedOptions().timeZone;
+            }
+            return saved;
+        }
+
+        function updateCurrentTimeDisplay() {
+            const timezone = getEffectiveTimezone();
+            const now = new Date();
+            const formatter = new Intl.DateTimeFormat('en-US', {
+                timeZone: timezone,
+                hour: 'numeric',
+                minute: '2-digit',
+                hour12: true
+            });
+            document.getElementById('currentTimeDisplay').textContent = formatter.format(now);
+        }
+
+        function applyTimezoneSelection(timezone) {
+            const select = document.getElementById('timezoneSelect');
+            select.value = timezone;
+            
+            // Update detected timezone in auto option text
+            const detectedTZ = Intl.DateTimeFormat().resolvedOptions().timeZone;
+            const autoOption = select.querySelector('option[value="auto"]');
+            if (autoOption) {
+                autoOption.textContent = `Auto-detect (Current: ${detectedTZ})`;
+            }
+            
+            updateCurrentTimeDisplay();
+        }
+
+        document.getElementById('timezoneSelect').addEventListener('change', function() {
+            localStorage.setItem('appTimezone', this.value);
+            applyTimezoneSelection(this.value);
+            showToast();
+        });
+
+        // Initialize timezone on page load
+        applyTimezoneSelection(getCurrentTimezone());
+        
+        // Update clock every second
+        setInterval(updateCurrentTimeDisplay, 1000);
+
         // Reset to Defaults button with custom modal
         const resetModal = document.getElementById('resetModal');
         const resetBtn = document.getElementById('resetToDefaults');
@@ -1197,6 +1316,10 @@
             // Reset Poster Mode to cover
             localStorage.setItem('posterDisplayMode', 'cover');
             applySelection('cover');
+            
+            // Reset Timezone to auto
+            localStorage.setItem('appTimezone', 'auto');
+            applyTimezoneSelection('auto');
             
             resetModal.classList.remove('active');
             showToast();
