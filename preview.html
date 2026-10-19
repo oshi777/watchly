@@ -558,8 +558,11 @@
             cursor: pointer;
             font-family: 'Inter', sans-serif;
             font-weight: 600;
-            text-transform: uppercase;
             letter-spacing: 0.5px;
+        }
+
+        .mockup-filters button {
+            text-transform: uppercase;
         }
 
         .mockup-filters select:hover,
@@ -570,12 +573,15 @@
 
         .mockup-stats {
             display: flex;
-            gap: 20px;
+            justify-content: center;
+            gap: 40px;
             margin-bottom: 40px;
             background: var(--surface);
-            padding: 20px 30px;
-            border-radius: 12px;
-            border: 1px solid rgba(195,199,206,0.08);
+            padding: 28px 30px;
+            border-radius: 0;
+            border: none;
+            border-top: 2px solid rgba(195,199,206,0.15);
+            border-bottom: 2px solid rgba(195,199,206,0.15);
         }
 
         .mockup-stat {
@@ -591,10 +597,10 @@
         }
 
         .mockup-stat-label {
-            font-size: 0.75rem;
-            color: var(--muted);
+            font-size: 0.85rem;
+            color: var(--silver);
             text-transform: uppercase;
-            letter-spacing: 0.8px;
+            letter-spacing: 1.2px;
             font-weight: 600;
         }
 
@@ -721,8 +727,9 @@
             }
 
             .mockup-stats {
-                padding: 16px 20px;
-                gap: 16px;
+                padding: 25px 20px;
+                gap: 30px;
+                justify-content: center;
             }
 
             .mockup-stat-number {
@@ -756,8 +763,9 @@
             }
 
             .mockup-stats {
-                gap: 12px;
-                padding: 14px 16px;
+                gap: 15px;
+                padding: 15px;
+                justify-content: center;
             }
 
             .mockup-stat-number {
@@ -824,15 +832,15 @@
                         <input type="text" class="mockup-search-input" placeholder="Search movies and shows..." disabled>
                         <div class="mockup-filters">
                             <select disabled>
-                                <option>All Status</option>
+                                <option>ALL STATUS</option>
                             </select>
                             <select disabled>
-                                <option>All Genres</option>
+                                <option>ALL GENRES</option>
                             </select>
-                            <button>+ Add Show</button>
-                            <button>Export</button>
-                            <button>Import</button>
-                            <button>Reset All</button>
+                            <button>+ ADD SHOW</button>
+                            <button>EXPORT</button>
+                            <button>IMPORT</button>
+                            <button>RESET ALL</button>
                         </div>
                     </div>
                 </div>
