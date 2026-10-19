@@ -138,9 +138,9 @@
 
         .btn-primary {
             padding: 16px 48px;
-            background: var(--light);
-            color: var(--dark) !important;
-            border: none;
+            background: transparent;
+            color: var(--light);
+            border: 2px solid var(--light);
             border-radius: 10px;
             font-size: 1.1rem;
             font-weight: 700;
@@ -151,8 +151,10 @@
         }
 
         .btn-primary:hover {
+            background: var(--light);
+            color: var(--dark);
             transform: translateY(-2px);
-            box-shadow: 0 10px 30px rgba(242,244,247,0.3);
+            box-shadow: 0 8px 24px rgba(242,244,247,0.2);
         }
 
         .btn-secondary {
@@ -185,8 +187,8 @@
 
         .feature-card {
             background: rgba(30, 33, 38, 0.4);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
+            backdrop-filter: blur(6px);
+            -webkit-backdrop-filter: blur(6px);
             border: 1px solid rgba(195,199,206,0.1);
             border-radius: 20px;
             padding: 48px 36px;
