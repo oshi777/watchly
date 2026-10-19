@@ -347,7 +347,8 @@
                         typeRank: 0,  // top-level entries win ties
                         partNumber: 0,
                         genres: item.genres || [],
-                        isMovie: item.isMovie
+                        isMovie: item.isMovie,
+                        addedAt: item.addedAt || 0  // Include timestamp for sorting
                     });
                 }
 
@@ -369,7 +370,8 @@
                             typeRank: 1,  // seasons/parts lose to top-level on a tie
                             partNumber: s.season || 0,
                             genres: item.genres || [],
-                            isMovie: item.isMovie
+                            isMovie: item.isMovie,
+                            addedAt: item.addedAt || 0  // Include timestamp for sorting
                         });
                     });
                 }
@@ -391,10 +393,12 @@
             const withDate = entries.filter(e => e.parsedDate !== null);
             const noDate   = entries.filter(e => e.parsedDate === null);
 
-            // Sort: newest→oldest; ties broken by yearOnly, then typeRank (show/movie above seasons), then partNumber desc
+            // Sort: newest→oldest; ties broken by addedAt timestamp (newest first), then yearOnly, then typeRank, then partNumber
             withDate.sort((a, b) => {
                 const dateDiff = b.parsedDate - a.parsedDate;
                 if (dateDiff !== 0) return dateDiff;
+                // Same date: sort by addedAt timestamp (most recent first)
+                if (a.addedAt !== b.addedAt) return (b.addedAt || 0) - (a.addedAt || 0);
                 // Same timestamp: full dates above year-only dates
                 if (a.yearOnly !== b.yearOnly) return a.yearOnly ? 1 : -1;
                 // Same date & same yearOnly: top-level show/movie above seasons (typeRank 0 < 1)
