@@ -657,27 +657,44 @@
         const TMDB_TOKEN = 'eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI3YTgzYTQ5NWFiMTg0ZGQzMjEzYmVjMjVkMzE2MDc3NiIsIm5iZiI6MTc0OTk1NDQ3Ni44MTcsInN1YiI6IjY4NGUyZmFjNGEzZTQ0Y2Y2ODI5NGM2OSIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.OGP__W2OeeziBS4zsFtFWxcqnSwb7-IZ_7XUGGLGcGE';
         const TMDB_IMAGE_BASE = 'https://image.tmdb.org/t/p/w342';
 
-        // Create mockup interface
-        function createMockup() {
+        // Create mockup interface with real TMDB posters
+        async function createMockup() {
             const mockupContainer = document.getElementById('mockupContainer');
             
             const sampleShows = [
-                { title: 'Breaking Bad', year: '2023', status: 'watched', letter: 'B' },
-                { title: 'The Last of Us', year: '2024', status: 'watched', letter: 'T' },
-                { title: 'Stranger Things', year: '2024', status: 'pending', letter: 'S' },
-                { title: 'The Bear', year: '2024', status: 'pending', letter: 'T' },
-                { title: 'Succession', year: '2023', status: 'watched', letter: 'S' },
-                { title: 'Wednesday', year: '2024', status: 'pending', letter: 'W' },
-                { title: 'The Crown', year: '2023', status: 'watched', letter: 'T' },
-                { title: 'Ozark', year: '2023', status: 'watched', letter: 'O' },
-                { title: 'Dark', year: '2023', status: 'watched', letter: 'D' },
-                { title: 'Better Call Saul', year: '2023', status: 'watched', letter: 'B' },
-                { title: 'The Witcher', year: '2024', status: 'pending', letter: 'T' },
-                { title: 'House of Dragon', year: '2024', status: 'pending', letter: 'H' }
+                { title: 'Breaking Bad', year: '2023', status: 'watched', tmdbId: 1396, type: 'tv' },
+                { title: 'The Last of Us', year: '2024', status: 'watched', tmdbId: 100088, type: 'tv' },
+                { title: 'Stranger Things', year: '2024', status: 'pending', tmdbId: 66732, type: 'tv' },
+                { title: 'The Bear', year: '2024', status: 'pending', tmdbId: 136315, type: 'tv' },
+                { title: 'Succession', year: '2023', status: 'watched', tmdbId: 76331, type: 'tv' },
+                { title: 'Wednesday', year: '2024', status: 'pending', tmdbId: 119051, type: 'tv' },
+                { title: 'The Crown', year: '2023', status: 'watched', tmdbId: 1399, type: 'tv' },
+                { title: 'Ozark', year: '2023', status: 'watched', tmdbId: 69740, type: 'tv' },
+                { title: 'Dark', year: '2023', status: 'watched', tmdbId: 70523, type: 'tv' },
+                { title: 'Better Call Saul', year: '2023', status: 'watched', tmdbId: 60059, type: 'tv' },
+                { title: 'The Witcher', year: '2024', status: 'pending', tmdbId: 71912, type: 'tv' },
+                { title: 'House of the Dragon', year: '2024', status: 'pending', tmdbId: 94997, type: 'tv' }
             ];
 
             const watchedCount = sampleShows.filter(s => s.status === 'watched').length;
             const upcomingCount = 0;
+
+            // Fetch poster URLs
+            const headers = { 'Authorization': `Bearer ${TMDB_TOKEN}` };
+            const posterPromises = sampleShows.map(async show => {
+                try {
+                    const response = await fetch(`https://api.themoviedb.org/3/tv/${show.tmdbId}`, { headers });
+                    const data = await response.json();
+                    return {
+                        ...show,
+                        poster: data.poster_path ? TMDB_IMAGE_BASE + data.poster_path : null
+                    };
+                } catch (error) {
+                    return { ...show, poster: null };
+                }
+            });
+
+            const showsWithPosters = await Promise.all(posterPromises);
 
             mockupContainer.innerHTML = `
                 <div class="mockup-header">
@@ -701,10 +718,13 @@
                 </div>
 
                 <div class="mockup-grid">
-                    ${sampleShows.map(show => `
+                    ${showsWithPosters.map(show => `
                         <div class="mockup-card">
                             <div class="mockup-poster">
-                                <div class="mockup-poster-text">${show.letter}</div>
+                                ${show.poster 
+                                    ? `<img src="${show.poster}" alt="${show.title}" style="width: 100%; height: 100%; object-fit: cover;">` 
+                                    : `<div class="mockup-poster-text">${show.title.charAt(0)}</div>`
+                                }
                             </div>
                             <div class="mockup-info">
                                 <div class="mockup-card-title">${show.title}</div>
@@ -719,12 +739,6 @@
                     `).join('')}
                 </div>
             `;
-        }
-
-        // Replace placeholder with actual screenshot path once available
-        const previewImg = document.getElementById('previewScreenshot');
-        if (previewImg) {
-            // You can replace this with an actual screenshot file: previewImg.src = 'watchly-screenshot.png';
         }
 
         // Create mockup on load
