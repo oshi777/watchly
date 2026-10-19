@@ -16,6 +16,11 @@
             overflow-x: hidden;
         }
 
+        /* Smooth scroll */
+        html {
+            scroll-behavior: smooth;
+        }
+
         /* Background with poster grid - same as first version */
         .hero-bg {
             position: fixed;
@@ -246,8 +251,76 @@
 
         .feature-description {
             font-size: 1.05rem;
-            color: var(--silver);
+            color: rgba(195,199,206,0.85);
             line-height: 1.8;
+        }
+
+        /* Site Preview Section */
+        .preview-section {
+            position: relative;
+            z-index: 10;
+            padding: 100px 20px;
+            background: var(--bg);
+        }
+
+        .preview-content {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .preview-header {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+
+        .preview-header h2 {
+            font-size: 3rem;
+            font-weight: 800;
+            color: var(--light);
+            margin-bottom: 16px;
+        }
+
+        .preview-header p {
+            font-size: 1.2rem;
+            color: var(--silver);
+        }
+
+        .preview-image {
+            width: 100%;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+            border: 1px solid rgba(195,199,206,0.1);
+        }
+
+        .preview-image img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        @media (max-width: 768px) {
+            .preview-section {
+                padding: 60px 20px;
+            }
+
+            .preview-header h2 {
+                font-size: 2.2rem;
+            }
+
+            .preview-header p {
+                font-size: 1rem;
+            }
+
+            .preview-image {
+                border-radius: 12px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .preview-header h2 {
+                font-size: 1.8rem;
+            }
         }
 
         /* Loading state */
@@ -373,7 +446,7 @@
                             <line x1="17" y1="7" x2="22" y2="7"/>
                         </svg>
                     </div>
-                    <h3 class="feature-title">Track Everything</h3>
+                    <h3 class="feature-title">Keep Track</h3>
                     <p class="feature-description">
                         Organize all your movies and TV shows in one beautiful, easy-to-use interface with powerful search and filters.
                     </p>
@@ -408,9 +481,28 @@
         </div>
     </div>
 
+    <!-- Site Preview Section -->
+    <section class="preview-section">
+        <div class="preview-content">
+            <div class="preview-header">
+                <h2>See It In Action</h2>
+                <p>A glimpse of what Watchly looks like</p>
+            </div>
+            <div class="preview-image">
+                <img src="https://placehold.co/1200x700/1E2126/C3C7CE?text=Watchly+Preview+Screenshot" alt="Watchly Preview" id="previewScreenshot">
+            </div>
+        </div>
+    </section>
+
     <script>
         const TMDB_TOKEN = 'eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI3YTgzYTQ5NWFiMTg0ZGQzMjEzYmVjMjVkMzE2MDc3NiIsIm5iZiI6MTc0OTk1NDQ3Ni44MTcsInN1YiI6IjY4NGUyZmFjNGEzZTQ0Y2Y2ODI5NGM2OSIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.OGP__W2OeeziBS4zsFtFWxcqnSwb7-IZ_7XUGGLGcGE';
         const TMDB_IMAGE_BASE = 'https://image.tmdb.org/t/p/w342';
+
+        // Replace placeholder with actual screenshot path once available
+        const previewImg = document.getElementById('previewScreenshot');
+        if (previewImg) {
+            // You can replace this with an actual screenshot file: previewImg.src = 'watchly-screenshot.png';
+        }
 
         async function fetchPosters() {
             try {
