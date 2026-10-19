@@ -259,9 +259,21 @@ function performAutoBackup(githubToken) {
         return { id: id, title: item ? item.title : 'Unknown' };
     });
     
+    // Collect all settings
+    const settings = {
+        theme: localStorage.getItem('appTheme') || 'dark',
+        posterDisplayMode: localStorage.getItem('posterDisplayMode') || 'cover',
+        listGrouping: localStorage.getItem('listGrouping') || 'continuous',
+        quickAccessEnabled: localStorage.getItem('currentlyWatchingEnabled') !== 'false',
+        leaderboardEnabled: localStorage.getItem('leaderboardEnabled') !== 'false',
+        backupSyncMode: localStorage.getItem('backupSyncMode') || 'merge'
+    };
+    
     const exportData = {
         watchlistData: watchlistData,
         rankings: rankingsWithNames,
+        quickAccessOrder: JSON.parse(localStorage.getItem('quickAccessOrder') || '[]'),
+        settings: settings,
         timestamp: new Date().toISOString()
     };
     
