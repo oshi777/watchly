@@ -406,7 +406,7 @@ header p {
     justify-content: center;
     gap: 40px;
     margin-bottom: 40px;
-    padding: 20px;
+    padding: 10px 20px 20px 20px;
     border-bottom: 2px solid rgba(195,199,206,0.15);
 }
 
