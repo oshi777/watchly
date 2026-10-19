@@ -448,7 +448,7 @@ header p {
     align-items: center;
     justify-content: center;
     gap: 15px;
-    margin-bottom: 30px;
+    margin-bottom: 20px;
     position: relative;
 }
 
@@ -456,7 +456,7 @@ header p {
     font-size: 1.8rem;
     font-weight: 700;
     color: var(--light);
-    margin-bottom: 8px;
+    margin-bottom: 0;
     background: linear-gradient(135deg, var(--light) 0%, var(--silver) 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
