@@ -530,7 +530,7 @@
                             </div>
                         </div>
                         
-                        <div class="watchlist items-grid" id="mockWatchlist"></div>
+                        <div class="watchlist" id="mockWatchlist"></div>
                     </main>
                 </div>
 
@@ -612,11 +612,6 @@
         /* Override container padding for mockup */
         .preview-mockup-wrapper .container {
             padding-top: 0 !important;
-        }
-
-        /* Force exact grid sizing from main site */
-        .preview-mockup-wrapper .items-grid {
-            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)) !important;
         }
 
         /* Ensure all styles.css classes work in mockup */
@@ -904,9 +899,15 @@
                 return;
             }
 
+            // Create items-grid div like main site does
+            const grid = document.createElement('div');
+            grid.className = 'items-grid';
+
             filtered.forEach((item, index) => {
-                container.appendChild(createMockItemElement(item, index));
+                grid.appendChild(createMockItemElement(item, index));
             });
+
+            container.appendChild(grid);
         }
 
         // TMDB search for add modal
