@@ -609,6 +609,11 @@
             background: var(--bg);
         }
 
+        /* Force exact grid sizing from main site */
+        .preview-mockup-wrapper .items-grid {
+            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)) !important;
+        }
+
         /* Disable pointer events on disabled buttons */
         button:disabled {
             pointer-events: none;
