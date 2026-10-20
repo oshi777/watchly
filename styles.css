@@ -2003,6 +2003,11 @@ header p {
 }
 
 
+/* uniform grid */
+.items-grid {
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)) !important;
+}
+
 /* ── Poster card mobile overrides (has-poster / no-poster) ── */
 @media (max-width: 768px) {
     .items-grid {
