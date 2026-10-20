@@ -782,46 +782,38 @@
             renderMockWatchlist();
         }
 
-        // Create item element (copied from main site)
+        // Create item element (copied exactly from main site)
         function createMockItemElement(item, index) {
             const div = document.createElement('div');
-            const hasPoster = item.poster;
-            div.className = `item ${hasPoster ? 'has-poster' : 'no-poster'}`;
-            div.dataset.index = index;
+            const statusClass = item.status === 'watched' ? 'watched' : 
+                               item.status === 'upcoming' ? 'upcoming' : 
+                               item.status === 'currently-watching' ? 'currently-watching' : 'pending';
+            const statusLabel = item.status === 'watched' ? 'Watched' : 
+                               item.status === 'upcoming' ? 'Upcoming' : 
+                               item.status === 'currently-watching' ? 'Currently Watching' : 'To Watch';
 
-            if (hasPoster) {
-                div.innerHTML = `
-                    <img src="${item.poster}" alt="${item.title}" class="item-poster-bg">
-                    <div class="item-poster-footer">
-                        <div class="item-poster-title">${item.title}</div>
-                        <div class="item-poster-meta">
-                            <span class="item-poster-status ${item.status}">${
-                                item.status === 'watched' ? 'Watched' :
-                                item.status === 'currently-watching' ? 'Watching' :
-                                item.status === 'upcoming' ? 'Upcoming' : 'To Watch'
-                            }</span>
-                            ${item.year ? `<span>${item.year}</span>` : ''}
-                        </div>
+            const footerHtml = `
+                <div class="item-poster-footer">
+                    <div class="item-poster-title">${item.title}</div>
+                    <div class="item-poster-meta">
+                        <span class="item-poster-status ${statusClass}">${statusLabel}</span>
+                        ${item.year ? `<span>${item.year}</span>` : ''}
                     </div>
-                `;
+                </div>`;
+
+            if (item.poster) {
+                div.className = 'item has-poster';
+                div.innerHTML = `
+                    <img src="${item.poster}" alt="${item.title}" class="item-poster-bg" loading="lazy">
+                    ${footerHtml}`;
             } else {
+                div.className = 'item no-poster';
                 const letter = item.title.charAt(0).toUpperCase();
                 div.innerHTML = `
                     <div class="item-poster-placeholder">
-                        <span class="item-poster-placeholder-letter">${letter}</span>
+                        <div class="item-poster-placeholder-letter">${letter}</div>
                     </div>
-                    <div class="item-poster-footer">
-                        <div class="item-poster-title">${item.title}</div>
-                        <div class="item-poster-meta">
-                            <span class="item-poster-status ${item.status}">${
-                                item.status === 'watched' ? 'Watched' :
-                                item.status === 'currently-watching' ? 'Watching' :
-                                item.status === 'upcoming' ? 'Upcoming' : 'To Watch'
-                            }</span>
-                            ${item.year ? `<span>${item.year}</span>` : ''}
-                        </div>
-                    </div>
-                `;
+                    ${footerHtml}`;
             }
 
             // Click to view details
