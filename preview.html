@@ -487,295 +487,131 @@
             <div class="preview-header">
                 <h2>See It In Action</h2>
             </div>
-            <div class="preview-image">
-                <div id="mockupContainer"></div>
+            <div class="preview-mockup-wrapper">
+                <!-- Use exact main site HTML structure -->
+                <div class="container" style="max-width: 100%; padding: 20px;">
+                    <header style="border-bottom: none; padding: 30px 20px 20px; margin-bottom: 0;">
+                        <h1>Watchly</h1>
+                        <p>Track, Organize, Discover</p>
+                        <div class="search-container">
+                            <input type="text" id="mockSearchInput" placeholder="Search movies and shows...">
+                            <div class="filters">
+                                <select id="mockStatusFilter">
+                                    <option value="all">ALL STATUS</option>
+                                    <option value="watched">WATCHED</option>
+                                    <option value="currently-watching">CURRENTLY WATCHING</option>
+                                    <option value="upcoming">UPCOMING</option>
+                                    <option value="pending">TO WATCH</option>
+                                </select>
+                                <select id="mockGenreFilter">
+                                    <option value="all">ALL GENRES</option>
+                                </select>
+                                <button id="mockAddShowBtn" class="add-btn">+ ADD SHOW</button>
+                                <button class="add-btn" disabled style="opacity: 0.5; cursor: not-allowed;">EXPORT</button>
+                                <button class="add-btn" disabled style="opacity: 0.5; cursor: not-allowed;">IMPORT</button>
+                                <button class="reset-btn" disabled style="opacity: 0.5; cursor: not-allowed;">RESET ALL</button>
+                            </div>
+                        </div>
+                    </header>
+
+                    <main>
+                        <div class="stats">
+                            <div class="stat-item">
+                                <span class="stat-number" id="mockTotalCount">0</span>
+                                <span class="stat-label">Total Items</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-number" id="mockWatchedCount">0</span>
+                                <span class="stat-label">Watched</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-number" id="mockUpcomingCount">0</span>
+                                <span class="stat-label">Upcoming</span>
+                            </div>
+                        </div>
+                        
+                        <div class="watchlist items-grid" id="mockWatchlist"></div>
+                    </main>
+                </div>
+
+                <!-- Add Show Modal (with disabled submit) -->
+                <div id="mockAddModal" class="modal">
+                    <div class="modal-content">
+                        <span class="close" id="mockModalClose">&times;</span>
+                        <h2>Add New Show/Movie</h2>
+                        <form id="mockAddForm">
+                            <div class="tmdb-search-wrapper">
+                                <input type="text" id="mockNewTitle" placeholder="Title — start typing to search TMDB" autocomplete="off">
+                                <div id="mockTmdbDropdown" class="tmdb-dropdown"></div>
+                            </div>
+                            <select id="mockNewStatus">
+                                <option value="pending">To Watch</option>
+                                <option value="currently-watching">Currently Watching</option>
+                                <option value="watched">Watched</option>
+                                <option value="upcoming">Upcoming</option>
+                            </select>
+                            <input type="text" id="mockNewGenres" placeholder="Genres (comma separated)">
+                            <input type="date" id="mockNewDate" placeholder="Date">
+                            <input type="number" id="mockNewYear" placeholder="Release Year (optional)" min="1900" max="2030">
+                            <input type="text" id="mockNewNote" placeholder="Notes (optional)">
+                            <label><input type="checkbox" id="mockIsMovie"> Movie</label>
+                            <button type="button" id="mockSubmitBtn" style="background: var(--muted); cursor: not-allowed;">
+                                This is a preview - Visit main site to add shows
+                            </button>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- Detail Modal -->
+                <div id="mockDetailModal" class="modal">
+                    <div class="detail-modal-content">
+                        <div class="detail-layout">
+                            <div class="detail-poster-col">
+                                <img id="mockDetailPosterImg" src="" alt="" class="detail-poster-img" style="display: none;">
+                                <div id="mockDetailPosterPlaceholder" class="detail-poster-placeholder">
+                                    <span id="mockDetailPosterLetter"></span>
+                                </div>
+                            </div>
+                            <div class="detail-info-col">
+                                <div class="detail-topbar">
+                                    <div class="detail-topbar-badges">
+                                        <span id="mockDetailStatusBadge" class="item-poster-status"></span>
+                                        <span id="mockDetailTypeBadge" class="detail-type-badge"></span>
+                                    </div>
+                                    <button class="detail-close" id="mockDetailClose">Close</button>
+                                </div>
+                                <h2 id="mockDetailTitle" class="detail-title"></h2>
+                                <div id="mockDetailMeta" class="detail-meta"></div>
+                                <div id="mockDetailOverview" class="detail-overview"></div>
+                                <div id="mockDetailNote" class="detail-note"></div>
+                                <div id="mockDetailGenres" class="detail-genres"></div>
+                                <div class="detail-actions" style="opacity: 0.6;">
+                                    <p style="font-size: 0.85rem; color: var(--silver); margin-bottom: 10px;">
+                                        Actions disabled in preview mode
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </section>
 
     <style>
-        /* Mockup styles */
-        #mockupContainer {
+        /* Preview wrapper */
+        .preview-mockup-wrapper {
+            width: 100%;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+            border: 1px solid rgba(195,199,206,0.1);
             background: var(--bg);
-            padding: 40px 20px;
-            min-height: 600px;
-            max-width: 1400px;
-            margin: 0 auto;
         }
 
-        .mockup-header {
-            text-align: center;
-            margin-bottom: 30px;
-            padding: 30px 20px;
-            border-bottom: 2px solid rgba(195,199,206,0.15);
-        }
-
-        .mockup-title {
-            font-size: 3rem;
-            font-weight: 700;
-            color: var(--light);
-            margin-bottom: 10px;
-        }
-
-        .mockup-subtitle {
-            font-size: 1.3rem;
-            color: var(--silver);
-            margin-bottom: 30px;
-            font-weight: 300;
-        }
-
-        .mockup-search-container {
-            max-width: 600px;
-            margin: 0 auto;
-        }
-
-        .mockup-search-input {
-            width: 100%;
-            padding: 16px 20px;
-            font-size: 1rem;
-            border: 1px solid rgba(195,199,206,0.2);
-            border-radius: 10px;
-            background-color: var(--surface);
-            color: var(--light);
-            margin-bottom: 20px;
-        }
-
-        .mockup-filters {
-            display: flex;
-            gap: 12px;
-            justify-content: center;
-            flex-wrap: wrap;
-        }
-
-        .mockup-filters select,
-        .mockup-filters button {
-            padding: 10px 16px;
-            border: 1px solid rgba(195,199,206,0.2);
-            border-radius: 8px;
-            background-color: var(--surface);
-            color: var(--light);
-            font-size: 0.9rem;
-            cursor: pointer;
-            font-family: 'Inter', sans-serif;
-            font-weight: 600;
-            letter-spacing: 0.5px;
-            text-transform: uppercase;
-        }
-
-        .mockup-filters button {
-            text-transform: uppercase;
-        }
-
-        .mockup-filters select:hover,
-        .mockup-filters button:hover {
-            border-color: var(--silver);
-            background: var(--muted);
-        }
-
-        .mockup-stats {
-            display: flex;
-            justify-content: center;
-            gap: 40px;
-            margin-bottom: 40px;
-            background: var(--surface);
-            padding: 28px 30px;
-            border-radius: 0;
-            border: none;
-            border-top: 2px solid rgba(195,199,206,0.15);
-            border-bottom: 2px solid rgba(195,199,206,0.15);
-        }
-
-        .mockup-stat {
-            text-align: center;
-        }
-
-        .mockup-stat-number {
-            font-size: 2rem;
-            font-weight: 800;
-            color: var(--light);
-            line-height: 1;
-            margin-bottom: 6px;
-        }
-
-        .mockup-stat-label {
-            font-size: 0.85rem;
-            color: var(--silver);
-            text-transform: uppercase;
-            letter-spacing: 1.2px;
-            font-weight: 600;
-        }
-
-        .mockup-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
-            gap: 20px;
-        }
-
-        .mockup-card {
-            position: relative;
-            border-radius: 12px;
-            overflow: hidden;
-            transition: all 0.3s ease;
-            cursor: pointer;
-        }
-
-        .mockup-card:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 12px 40px rgba(0,0,0,0.4);
-        }
-
-        .mockup-poster {
-            width: 100%;
-            aspect-ratio: 2/3;
-            background: linear-gradient(135deg, #3a3f47 0%, #2a2e35 100%);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            position: relative;
-        }
-
-        .mockup-poster img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-
-        .mockup-poster-text {
-            font-size: 3rem;
-            font-weight: 900;
-            color: rgba(195,199,206,0.2);
-        }
-
-        .mockup-info {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            background: linear-gradient(to top, rgba(11,12,14,0.95) 0%, rgba(11,12,14,0.8) 70%, transparent 100%);
-            padding: 40px 12px 12px;
-        }
-
-        .mockup-card-title {
-            font-size: 0.9rem;
-            font-weight: 600;
-            color: var(--light);
-            margin-bottom: 6px;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-        }
-
-        .mockup-meta {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            font-size: 0.7rem;
-        }
-
-        .mockup-status {
-            padding: 2px 6px;
-            border-radius: 4px;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 0.3px;
-            font-size: 0.65rem;
-        }
-
-        .status-watched {
-            background: rgba(40,167,69,0.15);
-            color: #28a745;
-            border: 1px solid rgba(40,167,69,0.3);
-        }
-
-        .status-pending {
-            background: rgba(255,193,7,0.15);
-            color: #ffc107;
-            border: 1px solid rgba(255,193,7,0.3);
-        }
-
-        .mockup-year {
-            color: var(--silver);
-            font-weight: 500;
-        }
-
-        @media (max-width: 768px) {
-            #mockupContainer {
-                padding: 30px 16px;
-            }
-
-            .mockup-title {
-                font-size: 2rem;
-            }
-
-            .mockup-subtitle {
-                font-size: 1.1rem;
-            }
-
-            .mockup-filters {
-                display: grid;
-                grid-template-columns: 1fr 1fr;
-                gap: 10px;
-            }
-
-            .mockup-filters select,
-            .mockup-filters button {
-                width: 100%;
-            }
-
-            .mockup-grid {
-                grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
-                gap: 16px;
-            }
-
-            .mockup-stats {
-                padding: 25px 20px;
-                gap: 30px;
-                justify-content: center;
-            }
-
-            .mockup-stat-number {
-                font-size: 1.6rem;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .mockup-title {
-                font-size: 1.3rem;
-            }
-
-            .mockup-subtitle {
-                font-size: 0.75rem;
-            }
-
-            .mockup-search-input {
-                padding: 8px 10px;
-                font-size: 16px;
-            }
-
-            .mockup-filters {
-                display: flex;
-                flex-direction: column;
-                gap: 6px;
-            }
-
-            .mockup-grid {
-                grid-template-columns: repeat(2, 1fr);
-                gap: 12px;
-            }
-
-            .mockup-stats {
-                gap: 15px;
-                padding: 15px;
-                justify-content: center;
-            }
-
-            .mockup-stat-number {
-                font-size: 1.4rem;
-            }
-
-            .mockup-stat-label {
-                font-size: 0.7rem;
-            }
+        /* Disable pointer events on disabled buttons */
+        button:disabled {
+            pointer-events: none;
         }
     </style>
 
@@ -783,111 +619,26 @@
         const TMDB_TOKEN = 'eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI3YTgzYTQ5NWFiMTg0ZGQzMjEzYmVjMjVkMzE2MDc3NiIsIm5iZiI6MTc0OTk1NDQ3Ni44MTcsInN1YiI6IjY4NGUyZmFjNGEzZTQ0Y2Y2ODI5NGM2OSIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.OGP__W2OeeziBS4zsFtFWxcqnSwb7-IZ_7XUGGLGcGE';
         const TMDB_IMAGE_BASE = 'https://image.tmdb.org/t/p/w342';
 
-        // Create mockup interface with real TMDB posters
-        async function createMockup() {
-            const mockupContainer = document.getElementById('mockupContainer');
-            
-            const sampleShows = [
-                { title: 'Breaking Bad', year: '2023', status: 'watched', tmdbId: 1396, type: 'tv' },
-                { title: 'The Last of Us', year: '2024', status: 'watched', tmdbId: 100088, type: 'tv' },
-                { title: 'Stranger Things', year: '2024', status: 'pending', tmdbId: 66732, type: 'tv' },
-                { title: 'Prison Break', year: '2024', status: 'pending', tmdbId: 2288, type: 'tv' },
-                { title: 'Succession', year: '2023', status: 'watched', tmdbId: 76331, type: 'tv' },
-                { title: 'Wednesday', year: '2024', status: 'pending', tmdbId: 119051, type: 'tv' },
-                { title: 'The Crown', year: '2023', status: 'watched', tmdbId: 1399, type: 'tv' },
-                { title: 'Ozark', year: '2023', status: 'watched', tmdbId: 69740, type: 'tv' },
-                { title: 'Dark', year: '2023', status: 'watched', tmdbId: 70523, type: 'tv' },
-                { title: 'Better Call Saul', year: '2023', status: 'watched', tmdbId: 60059, type: 'tv' },
-                { title: 'The Witcher', year: '2024', status: 'pending', tmdbId: 71912, type: 'tv' },
-                { title: 'House of the Dragon', year: '2024', status: 'pending', tmdbId: 94997, type: 'tv' },
-                { title: 'Peaky Blinders', year: '2023', status: 'watched', tmdbId: 60574, type: 'tv' },
-                { title: 'Game of Thrones', year: '2023', status: 'watched', tmdbId: 1399, type: 'tv' },
-                { title: 'The Walking Dead', year: '2024', status: 'pending', tmdbId: 1402, type: 'tv' }
-            ];
+        // Mock watchlist data
+        let mockWatchlistData = [
+            { id: 1, title: 'Breaking Bad', status: 'watched', genres: ['Crime', 'Drama', 'Thriller'], year: '2008', date: '2023', isMovie: false, tmdbId: 1396, poster: null },
+            { id: 2, title: 'The Last of Us', status: 'watched', genres: ['Sci-Fi & Fantasy', 'Drama', 'Action & Adventure'], year: '2023', date: 'Nov 14, 2024', isMovie: false, tmdbId: 100088, poster: null },
+            { id: 3, title: 'Stranger Things', status: 'pending', genres: ['Sci-Fi & Fantasy', 'Mystery', 'Drama'], year: '2016', date: '', isMovie: false, tmdbId: 66732, poster: null },
+            { id: 4, title: 'Prison Break', status: 'pending', genres: ['Action & Adventure', 'Crime', 'Drama'], year: '2005', date: '', isMovie: false, tmdbId: 2288, poster: null },
+            { id: 5, title: 'Succession', status: 'watched', genres: ['Drama'], year: '2018', date: '2023', isMovie: false, tmdbId: 76331, poster: null },
+            { id: 6, title: 'Wednesday', status: 'pending', genres: ['Sci-Fi & Fantasy', 'Mystery', 'Comedy'], year: '2022', date: '', isMovie: false, tmdbId: 119051, poster: null },
+            { id: 7, title: 'The Crown', status: 'watched', genres: ['Drama'], year: '2016', date: '2023', isMovie: false, tmdbId: 73375, poster: null },
+            { id: 8, title: 'Ozark', status: 'watched', genres: ['Crime', 'Drama'], year: '2017', date: '2023', isMovie: false, tmdbId: 69740, poster: null },
+            { id: 9, title: 'Dark', status: 'watched', genres: ['Crime', 'Drama', 'Mystery', 'Sci-Fi & Fantasy'], year: '2017', date: '2023', isMovie: false, tmdbId: 70523, poster: null },
+            { id: 10, title: 'Better Call Saul', status: 'watched', genres: ['Crime', 'Drama'], year: '2015', date: '2023', isMovie: false, tmdbId: 60059, poster: null },
+            { id: 11, title: 'The Witcher', status: 'pending', genres: ['Action & Adventure', 'Sci-Fi & Fantasy', 'Drama'], year: '2019', date: '', isMovie: false, tmdbId: 71912, poster: null },
+            { id: 12, title: 'House of the Dragon', status: 'pending', genres: ['Sci-Fi & Fantasy', 'Drama', 'Action & Adventure'], year: '2022', date: '', isMovie: false, tmdbId: 94997, poster: null },
+            { id: 13, title: 'Peaky Blinders', status: 'watched', genres: ['Crime', 'Drama'], year: '2013', date: '2023', isMovie: false, tmdbId: 60574, poster: null },
+            { id: 14, title: 'Game of Thrones', status: 'watched', genres: ['Sci-Fi & Fantasy', 'Drama', 'Action & Adventure'], year: '2011', date: '2023', isMovie: false, tmdbId: 1399, poster: null },
+            { id: 15, title: 'The Walking Dead', status: 'pending', genres: ['Action & Adventure', 'Drama', 'Sci-Fi & Fantasy'], year: '2010', date: '', isMovie: false, tmdbId: 1402, poster: null }
+        ];
 
-            const watchedCount = sampleShows.filter(s => s.status === 'watched').length;
-            const upcomingCount = 0;
-
-            // Fetch poster URLs
-            const headers = { 'Authorization': `Bearer ${TMDB_TOKEN}` };
-            const posterPromises = sampleShows.map(async show => {
-                try {
-                    const response = await fetch(`https://api.themoviedb.org/3/tv/${show.tmdbId}`, { headers });
-                    const data = await response.json();
-                    return {
-                        ...show,
-                        poster: data.poster_path ? TMDB_IMAGE_BASE + data.poster_path : null
-                    };
-                } catch (error) {
-                    return { ...show, poster: null };
-                }
-            });
-
-            const showsWithPosters = await Promise.all(posterPromises);
-
-            mockupContainer.innerHTML = `
-                <div class="mockup-header">
-                    <h1 class="mockup-title">Watchly</h1>
-                    <p class="mockup-subtitle">Track, Organize, Discover</p>
-                    <div class="mockup-search-container">
-                        <input type="text" class="mockup-search-input" placeholder="Search movies and shows..." disabled>
-                        <div class="mockup-filters">
-                            <select disabled>
-                                <option>ALL STATUS</option>
-                            </select>
-                            <select disabled>
-                                <option>ALL GENRES</option>
-                            </select>
-                            <button>+ ADD SHOW</button>
-                            <button>EXPORT</button>
-                            <button>IMPORT</button>
-                            <button>RESET ALL</button>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="mockup-stats">
-                    <div class="mockup-stat">
-                        <div class="mockup-stat-number">${sampleShows.length}</div>
-                        <div class="mockup-stat-label">Total Items</div>
-                    </div>
-                    <div class="mockup-stat">
-                        <div class="mockup-stat-number">${watchedCount}</div>
-                        <div class="mockup-stat-label">Watched</div>
-                    </div>
-                    <div class="mockup-stat">
-                        <div class="mockup-stat-number">${upcomingCount}</div>
-                        <div class="mockup-stat-label">Upcoming</div>
-                    </div>
-                </div>
-
-                <div class="mockup-grid">
-                    ${showsWithPosters.map(show => `
-                        <div class="mockup-card">
-                            <div class="mockup-poster">
-                                ${show.poster 
-                                    ? `<img src="${show.poster}" alt="${show.title}">` 
-                                    : `<div class="mockup-poster-text">${show.title.charAt(0)}</div>`
-                                }
-                            </div>
-                            <div class="mockup-info">
-                                <div class="mockup-card-title">${show.title}</div>
-                                <div class="mockup-meta">
-                                    <span class="mockup-status status-${show.status}">
-                                        ${show.status === 'watched' ? 'Watched' : 'To Watch'}
-                                    </span>
-                                    <span class="mockup-year">${show.year}</span>
-                                </div>
-                            </div>
-                        </div>
-                    `).join('')}
-                </div>
-            `;
-        }
-
-        // Create mockup on load
-        createMockup();
-
+        // Fetch posters for background animation
         async function fetchPosters() {
             try {
                 const headers = { 'Authorization': `Bearer ${TMDB_TOKEN}` };
@@ -969,6 +720,259 @@
                     if (posters.length > 0) createPosterColumns(posters);
                 });
             }, 500);
+        });
+
+        // Fetch mock posters
+        async function fetchMockPosters() {
+            const headers = { 'Authorization': `Bearer ${TMDB_TOKEN}` };
+            
+            for (const item of mockWatchlistData) {
+                if (item.tmdbId && !item.poster) {
+                    try {
+                        const response = await fetch(`https://api.themoviedb.org/3/tv/${item.tmdbId}`, { headers });
+                        const data = await response.json();
+                        if (data.poster_path) {
+                            item.poster = TMDB_IMAGE_BASE + data.poster_path;
+                        }
+                    } catch (error) {
+                        console.error(`Error fetching poster for ${item.title}:`, error);
+                    }
+                }
+            }
+            renderMockWatchlist();
+        }
+
+        // Create item element (copied from main site)
+        function createMockItemElement(item, index) {
+            const div = document.createElement('div');
+            const hasPoster = item.poster;
+            div.className = `item ${hasPoster ? 'has-poster' : 'no-poster'}`;
+            div.dataset.index = index;
+
+            if (hasPoster) {
+                div.innerHTML = `
+                    <img src="${item.poster}" alt="${item.title}" class="item-poster-bg">
+                    <div class="item-poster-footer">
+                        <div class="item-poster-title">${item.title}</div>
+                        <div class="item-poster-meta">
+                            <span class="item-poster-status ${item.status}">${
+                                item.status === 'watched' ? 'Watched' :
+                                item.status === 'currently-watching' ? 'Watching' :
+                                item.status === 'upcoming' ? 'Upcoming' : 'To Watch'
+                            }</span>
+                            ${item.year ? `<span>${item.year}</span>` : ''}
+                        </div>
+                    </div>
+                `;
+            } else {
+                const letter = item.title.charAt(0).toUpperCase();
+                div.innerHTML = `
+                    <div class="item-poster-placeholder">
+                        <span class="item-poster-placeholder-letter">${letter}</span>
+                    </div>
+                    <div class="item-poster-footer">
+                        <div class="item-poster-title">${item.title}</div>
+                        <div class="item-poster-meta">
+                            <span class="item-poster-status ${item.status}">${
+                                item.status === 'watched' ? 'Watched' :
+                                item.status === 'currently-watching' ? 'Watching' :
+                                item.status === 'upcoming' ? 'Upcoming' : 'To Watch'
+                            }</span>
+                            ${item.year ? `<span>${item.year}</span>` : ''}
+                        </div>
+                    </div>
+                `;
+            }
+
+            // Click to view details
+            div.addEventListener('click', () => showMockDetail(item));
+
+            return div;
+        }
+
+        // Show detail modal
+        function showMockDetail(item) {
+            const modal = document.getElementById('mockDetailModal');
+            const posterImg = document.getElementById('mockDetailPosterImg');
+            const posterPlaceholder = document.getElementById('mockDetailPosterPlaceholder');
+            const posterLetter = document.getElementById('mockDetailPosterLetter');
+
+            if (item.poster) {
+                posterImg.src = item.poster;
+                posterImg.style.display = 'block';
+                posterPlaceholder.style.display = 'none';
+            } else {
+                posterImg.style.display = 'none';
+                posterPlaceholder.style.display = 'flex';
+                posterLetter.textContent = item.title.charAt(0).toUpperCase();
+            }
+
+            document.getElementById('mockDetailStatusBadge').textContent = 
+                item.status === 'watched' ? 'Watched' :
+                item.status === 'currently-watching' ? 'Watching' :
+                item.status === 'upcoming' ? 'Upcoming' : 'To Watch';
+            document.getElementById('mockDetailStatusBadge').className = `item-poster-status ${item.status}`;
+            
+            document.getElementById('mockDetailTypeBadge').textContent = item.isMovie ? 'Movie' : 'Show';
+            document.getElementById('mockDetailTitle').textContent = item.title;
+            document.getElementById('mockDetailMeta').textContent = item.year || 'Year unknown';
+            document.getElementById('mockDetailOverview').textContent = 'Overview not available in preview mode.';
+            document.getElementById('mockDetailNote').textContent = '';
+            
+            const genresHtml = item.genres.map(g => `<span class="genre-tag">${g}</span>`).join('');
+            document.getElementById('mockDetailGenres').innerHTML = genresHtml;
+
+            modal.style.display = 'block';
+        }
+
+        // Render watchlist
+        function renderMockWatchlist() {
+            const searchTerm = document.getElementById('mockSearchInput').value.toLowerCase();
+            const statusFilter = document.getElementById('mockStatusFilter').value;
+            const genreFilter = document.getElementById('mockGenreFilter').value;
+
+            let filtered = mockWatchlistData.filter(item => {
+                const matchesSearch = item.title.toLowerCase().includes(searchTerm);
+                const matchesStatus = statusFilter === 'all' || item.status === statusFilter;
+                const matchesGenre = genreFilter === 'all' || item.genres.some(g => g === genreFilter);
+                return matchesSearch && matchesStatus && matchesGenre;
+            });
+
+            // Update stats
+            const totalCount = mockWatchlistData.length;
+            const watchedCount = mockWatchlistData.filter(i => i.status === 'watched').length;
+            const upcomingCount = mockWatchlistData.filter(i => i.status === 'upcoming').length;
+
+            document.getElementById('mockTotalCount').textContent = totalCount;
+            document.getElementById('mockWatchedCount').textContent = watchedCount;
+            document.getElementById('mockUpcomingCount').textContent = upcomingCount;
+
+            // Populate genre filter
+            const genreFilterSelect = document.getElementById('mockGenreFilter');
+            const allGenres = new Set();
+            mockWatchlistData.forEach(item => {
+                if (item.genres) item.genres.forEach(g => allGenres.add(g));
+            });
+            const currentGenre = genreFilterSelect.value;
+            genreFilterSelect.innerHTML = '<option value="all">ALL GENRES</option>';
+            Array.from(allGenres).sort().forEach(genre => {
+                const opt = document.createElement('option');
+                opt.value = genre;
+                opt.textContent = genre.toUpperCase();
+                genreFilterSelect.appendChild(opt);
+            });
+            genreFilterSelect.value = currentGenre;
+
+            // Render items
+            const container = document.getElementById('mockWatchlist');
+            container.innerHTML = '';
+
+            if (filtered.length === 0) {
+                container.innerHTML = '<div class="no-results">No items match your filters</div>';
+                return;
+            }
+
+            filtered.forEach((item, index) => {
+                container.appendChild(createMockItemElement(item, index));
+            });
+        }
+
+        // TMDB search for add modal
+        let mockTmdbTimeout;
+        document.addEventListener('DOMContentLoaded', () => {
+            fetchMockPosters();
+
+            // Search input
+            document.getElementById('mockSearchInput').addEventListener('input', renderMockWatchlist);
+            document.getElementById('mockStatusFilter').addEventListener('change', renderMockWatchlist);
+            document.getElementById('mockGenreFilter').addEventListener('change', renderMockWatchlist);
+
+            // Add show button
+            document.getElementById('mockAddShowBtn').addEventListener('click', () => {
+                document.getElementById('mockAddModal').style.display = 'block';
+            });
+
+            // Close modals
+            document.getElementById('mockModalClose').addEventListener('click', () => {
+                document.getElementById('mockAddModal').style.display = 'none';
+            });
+
+            document.getElementById('mockDetailClose').addEventListener('click', () => {
+                document.getElementById('mockDetailModal').style.display = 'none';
+            });
+
+            // Close modal on outside click
+            window.addEventListener('click', (e) => {
+                if (e.target.id === 'mockAddModal') {
+                    document.getElementById('mockAddModal').style.display = 'none';
+                }
+                if (e.target.id === 'mockDetailModal') {
+                    document.getElementById('mockDetailModal').style.display = 'none';
+                }
+            });
+
+            // TMDB search in add modal
+            const mockTitleInput = document.getElementById('mockNewTitle');
+            const mockDropdown = document.getElementById('mockTmdbDropdown');
+
+            mockTitleInput.addEventListener('input', () => {
+                clearTimeout(mockTmdbTimeout);
+                const query = mockTitleInput.value.trim();
+
+                if (query.length < 2) {
+                    mockDropdown.style.display = 'none';
+                    return;
+                }
+
+                mockTmdbTimeout = setTimeout(async () => {
+                    try {
+                        const headers = { 'Authorization': `Bearer ${TMDB_TOKEN}` };
+                        const response = await fetch(`https://api.themoviedb.org/3/search/multi?query=${encodeURIComponent(query)}`, { headers });
+                        const data = await response.json();
+
+                        if (!data.results || data.results.length === 0) {
+                            mockDropdown.innerHTML = '<div class="tmdb-no-results">No results found</div>';
+                            mockDropdown.style.display = 'block';
+                            return;
+                        }
+
+                        const items = data.results.filter(r => r.media_type === 'movie' || r.media_type === 'tv').slice(0, 5);
+                        
+                        mockDropdown.innerHTML = items.map(item => {
+                            const title = item.title || item.name;
+                            const year = item.release_date || item.first_air_date;
+                            const yearStr = year ? year.split('-')[0] : '';
+                            const poster = item.poster_path ? TMDB_IMAGE_BASE + item.poster_path : '';
+
+                            return `
+                                <div class="tmdb-result-item" data-title="${title}" data-year="${yearStr}" data-poster="${poster}" data-type="${item.media_type}">
+                                    ${poster ? `<img src="${poster}" class="tmdb-thumb" alt="${title}">` : '<div class="tmdb-thumb tmdb-no-poster">?</div>'}
+                                    <div class="tmdb-result-info">
+                                        <div class="tmdb-result-title">${title}</div>
+                                        <div class="tmdb-result-year">${yearStr} • ${item.media_type === 'movie' ? 'Movie' : 'TV Show'}</div>
+                                    </div>
+                                </div>
+                            `;
+                        }).join('');
+
+                        mockDropdown.innerHTML += '<div class="tmdb-attribution-dropdown">Data from <a href="https://www.themoviedb.org" target="_blank">TMDB</a></div>';
+                        mockDropdown.style.display = 'block';
+
+                        // Add click handlers
+                        mockDropdown.querySelectorAll('.tmdb-result-item').forEach(el => {
+                            el.addEventListener('click', () => {
+                                mockTitleInput.value = el.dataset.title;
+                                document.getElementById('mockNewYear').value = el.dataset.year;
+                                document.getElementById('mockIsMovie').checked = el.dataset.type === 'movie';
+                                mockDropdown.style.display = 'none';
+                            });
+                        });
+
+                    } catch (error) {
+                        console.error('TMDB search error:', error);
+                    }
+                }, 300);
+            });
         });
     </script>
 </body>
