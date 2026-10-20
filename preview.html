@@ -8,7 +8,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="styles.css?v=7">
+    <link rel="stylesheet" href="styles.css?v=8">
     <style>
         body {
             margin: 0;
@@ -612,6 +612,12 @@
         /* Override container padding for mockup */
         .preview-mockup-wrapper .container {
             padding-top: 0 !important;
+        }
+
+        /* Force the items-grid to use same sizing as main site */
+        .preview-mockup-wrapper .items-grid {
+            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)) !important;
+            gap: 24px !important;
         }
 
         /* Ensure all styles.css classes work in mockup */
