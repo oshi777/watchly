@@ -111,7 +111,7 @@
             font-weight: 900;
             letter-spacing: -4px;
             margin-bottom: 24px;
-            color: var(--light);
+            color: var(--silver);
             line-height: 1;
         }
 
@@ -481,58 +481,97 @@
         </div>
     </div>
 
-    <!-- Site Preview Section -->
-    <section class="preview-section">
-        <div class="preview-content">
-            <div class="preview-header">
-                <h2>See It In Action</h2>
-            </div>
-            <div class="preview-mockup-wrapper">
-                <!-- Use exact main site HTML structure -->
-                <div class="container" style="max-width: 1400px; padding: 20px; margin: 0 auto;">
-                    <header style="border-bottom: none; padding: 30px 20px 20px; margin-bottom: 0;">
-                        <h1>Watchly</h1>
-                        <p>Track, Organize, Discover</p>
-                        <div class="search-container">
-                            <input type="text" id="mockSearchInput" placeholder="Search movies and shows...">
-                            <div class="filters">
-                                <select id="mockStatusFilter">
-                                    <option value="all">ALL STATUS</option>
-                                    <option value="watched">WATCHED</option>
-                                    <option value="currently-watching">CURRENTLY WATCHING</option>
-                                    <option value="upcoming">UPCOMING</option>
-                                    <option value="pending">TO WATCH</option>
-                                </select>
-                                <select id="mockGenreFilter">
-                                    <option value="all">ALL GENRES</option>
-                                </select>
-                                <button id="mockAddShowBtn" class="add-btn">+ ADD SHOW</button>
-                                <button class="add-btn" disabled style="opacity: 0.5; cursor: not-allowed;">EXPORT</button>
-                                <button class="add-btn" disabled style="opacity: 0.5; cursor: not-allowed;">IMPORT</button>
-                                <button class="reset-btn" disabled style="opacity: 0.5; cursor: not-allowed;">RESET ALL</button>
-                            </div>
-                        </div>
-                    </header>
+    <script>
+        const TMDB_TOKEN = 'eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI3YTgzYTQ5NWFiMTg0ZGQzMjEzYmVjMjVkMzE2MDc3NiIsIm5iZiI6MTc0OTk1NDQ3Ni44MTcsInN1YiI6IjY4NGUyZmFjNGEzZTQ0Y2Y2ODI5NGM2OSIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.OGP__W2OeeziBS4zsFtFWxcqnSwb7-IZ_7XUGGLGcGE';
+        const TMDB_IMAGE_BASE = 'https://image.tmdb.org/t/p/w342';
 
-                    <main>
-                        <div class="stats">
-                            <div class="stat-item">
-                                <span class="stat-number" id="mockTotalCount">0</span>
-                                <span class="stat-label">Total Items</span>
-                            </div>
-                            <div class="stat-item">
-                                <span class="stat-number" id="mockWatchedCount">0</span>
-                                <span class="stat-label">Watched</span>
-                            </div>
-                            <div class="stat-item">
-                                <span class="stat-number" id="mockUpcomingCount">0</span>
-                                <span class="stat-label">Upcoming</span>
-                            </div>
-                        </div>
-                        
-                        <div class="watchlist" id="mockWatchlist"></div>
-                    </main>
-                </div>
+        async function fetchPosters() {
+            try {
+                const headers = { 'Authorization': `Bearer ${TMDB_TOKEN}` };
+                
+                const [trending, popularMovies, popularTV] = await Promise.all([
+                    fetch('https://api.themoviedb.org/3/trending/all/week', { headers }).then(r => r.json()),
+                    fetch('https://api.themoviedb.org/3/movie/popular', { headers }).then(r => r.json()),
+                    fetch('https://api.themoviedb.org/3/tv/popular', { headers }).then(r => r.json())
+                ]);
+
+                const allItems = [
+                    ...trending.results,
+                    ...popularMovies.results,
+                    ...popularTV.results
+                ].filter(item => item.poster_path);
+
+                for (let i = allItems.length - 1; i > 0; i--) {
+                    const j = Math.floor(Math.random() * (i + 1));
+                    [allItems[i], allItems[j]] = [allItems[j], allItems[i]];
+                }
+
+                return allItems.slice(0, 80);
+            } catch (error) {
+                console.error('Error fetching posters:', error);
+                return [];
+            }
+        }
+
+        function createPosterColumns(posters) {
+            const grid = document.getElementById('postersGrid');
+            if (!grid) return;
+            
+            grid.innerHTML = '';
+
+            const isMobile = window.innerWidth <= 768;
+            const isSmallMobile = window.innerWidth <= 480;
+            const columns = isSmallMobile ? 3 : (isMobile ? 4 : 8);
+            const postersPerColumn = Math.ceil(posters.length / columns);
+
+            const duplicatedPosters = [...posters, ...posters];
+
+            for (let col = 0; col < columns; col++) {
+                const column = document.createElement('div');
+                column.className = 'poster-column';
+
+                const startIndex = col * postersPerColumn;
+                const columnPosters = duplicatedPosters.slice(startIndex, startIndex + postersPerColumn * 2);
+
+                columnPosters.forEach(item => {
+                    const posterDiv = document.createElement('div');
+                    posterDiv.className = 'poster-item';
+                    
+                    const img = document.createElement('img');
+                    img.src = TMDB_IMAGE_BASE + item.poster_path;
+                    img.alt = item.title || item.name || '';
+                    img.loading = 'lazy';
+                    
+                    posterDiv.appendChild(img);
+                    column.appendChild(posterDiv);
+                });
+
+                grid.appendChild(column);
+            }
+
+            const loading = document.getElementById('loading');
+            if (loading) loading.style.display = 'none';
+        }
+
+        fetchPosters().then(posters => {
+            if (posters.length > 0) {
+                createPosterColumns(posters);
+            } else {
+                const loading = document.getElementById('loading');
+                if (loading) loading.textContent = 'Welcome to Watchly';
+            }
+        });
+
+        window.addEventListener('resize', () => {
+            fetchPosters().then(posters => {
+                if (posters.length > 0) {
+                    createPosterColumns(posters);
+                }
+            });
+        });
+    </script>
+</body>
+</html>
 
                 <!-- Add Show Modal (with disabled submit) -->
                 <div id="mockAddModal" class="modal">
@@ -616,7 +655,7 @@
 
         /* Force the items-grid to use same sizing as main site */
         .preview-mockup-wrapper .items-grid {
-            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)) !important;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)) !important;
             gap: 24px !important;
         }
 
