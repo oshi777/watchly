@@ -1,6 +1,8 @@
 'use client';
 import { useState, useEffect } from 'react';
 import { WatchlistItem } from '@/lib/types';
+import { syncWatchlistToCloud } from '@/lib/supabase';
+import { useAuth } from '@/hooks/useAuth';
 
 interface QuickAccessProps {
     items: WatchlistItem[];
@@ -23,6 +25,7 @@ export default function QuickAccess({ items, onItemClick }: QuickAccessProps) {
     const [mounted, setMounted] = useState(false);
     const [showManageModal, setShowManageModal] = useState(false);
     const [searchTerm, setSearchTerm] = useState('');
+    const { user, isAuthenticated } = useAuth();
 
     useEffect(() => {
         try {
@@ -39,6 +42,11 @@ export default function QuickAccess({ items, onItemClick }: QuickAccessProps) {
     const saveQuickAccess = (qa: QuickAccessEntry[]) => {
         localStorage.setItem('quickAccess', JSON.stringify(qa));
         setQuickAccess(qa);
+        // Sync to cloud
+        if (isAuthenticated && user) {
+            const watchlist = JSON.parse(localStorage.getItem('watchlistData') || '[]');
+            syncWatchlistToCloud(user.id, watchlist).catch(() => {});
+        }
     };
 
     const addToQuickAccess = (itemId: string) => {

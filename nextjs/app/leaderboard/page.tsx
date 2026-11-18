@@ -1,11 +1,14 @@
 'use client';
 import { useState, useEffect } from 'react';
 import { WatchlistItem } from '@/lib/types';
+import { syncWatchlistToCloud } from '@/lib/supabase';
+import { useAuth } from '@/hooks/useAuth';
 
 export default function LeaderboardPage() {
     const [items, setItems] = useState<WatchlistItem[]>([]);
     const [rankings, setRankings] = useState<string[]>([]);
     const [mounted, setMounted] = useState(false);
+    const { user, isAuthenticated } = useAuth();
 
     useEffect(() => {
         try {
@@ -22,6 +25,11 @@ export default function LeaderboardPage() {
     const saveRankings = (newRankings: string[]) => {
         setRankings(newRankings);
         localStorage.setItem('rankings', JSON.stringify(newRankings));
+        // Sync to cloud
+        if (isAuthenticated && user) {
+            const watchlist = JSON.parse(localStorage.getItem('watchlistData') || '[]');
+            syncWatchlistToCloud(user.id, watchlist).catch(() => {});
+        }
     };
 
     const moveUp = (index: number) => {
