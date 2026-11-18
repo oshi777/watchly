@@ -37,6 +37,8 @@ export default function HomePage() {
         const exportData = {
             watchlistData: items,
             rankings: rankingsWithNames,
+            leaderboardRankings: JSON.parse(localStorage.getItem('rankings') || '[]'),
+            quickAccess: JSON.parse(localStorage.getItem('quickAccess') || '[]'),
             timestamp: new Date().toISOString()
         };
         const data = JSON.stringify(exportData, null, 2);

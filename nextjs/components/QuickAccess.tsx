@@ -39,6 +39,21 @@ export default function QuickAccess({ items, onItemClick }: QuickAccessProps) {
         setMounted(true);
     }, []);
 
+    // Auto-pin currently-watching items that aren't pinned yet
+    useEffect(() => {
+        if (!mounted || items.length === 0) return;
+        const currentlyWatching = items.filter(i => i.status === 'currently-watching');
+        if (currentlyWatching.length === 0) return;
+        setQuickAccess(prev => {
+            const existingIds = new Set(prev.map(qa => qa.itemId));
+            const toAdd = currentlyWatching.filter(i => !existingIds.has(i.id));
+            if (toAdd.length === 0) return prev;
+            const updated = [...prev, ...toAdd.map(i => ({ itemId: i.id }))];
+            localStorage.setItem('quickAccess', JSON.stringify(updated));
+            return updated;
+        });
+    }, [mounted, items]);
+
     const saveQuickAccess = (qa: QuickAccessEntry[]) => {
         localStorage.setItem('quickAccess', JSON.stringify(qa));
         setQuickAccess(qa);
