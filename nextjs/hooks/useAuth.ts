@@ -52,12 +52,18 @@ export function useAuth() {
         setProfile(null);
     }, []);
 
+    const refreshProfile = useCallback(async (userId: string) => {
+        const p = await getUserProfile(userId);
+        setProfile(p);
+    }, []);
+
     return {
         user,
         profile,
         loading: !mounted || loading,
         loginWithGoogle,
         logout,
+        refreshProfile,
         isAuthenticated: !!user,
     };
 }

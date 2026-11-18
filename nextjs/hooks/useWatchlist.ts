@@ -10,7 +10,7 @@ export function useWatchlist() {
     const [searchTerm, setSearchTerm] = useState('');
     const [statusFilter, setStatusFilter] = useState('all');
     const [genreFilter, setGenreFilter] = useState('all');
-    const { user, isAuthenticated } = useAuth();
+    const { user, isAuthenticated, refreshProfile } = useAuth();
 
     // Track whether we've already loaded from cloud for this session
     const cloudLoadedRef = useRef(false);
@@ -86,9 +86,11 @@ export function useWatchlist() {
         if (!isAuthenticated || !user) return;
         if (syncTimerRef.current) clearTimeout(syncTimerRef.current);
         syncTimerRef.current = setTimeout(() => {
-            syncWatchlistToCloud(user.id, newItems).catch(() => {});
+            syncWatchlistToCloud(user.id, newItems)
+                .then(() => refreshProfile(user.id))
+                .catch(() => {});
         }, 1500);
-    }, [isAuthenticated, user]);
+    }, [isAuthenticated, user, refreshProfile]);
 
     const save = useCallback((newItems: WatchlistItem[]) => {
         saveToStorage(newItems);

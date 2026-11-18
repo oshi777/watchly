@@ -91,11 +91,11 @@ export default function GuidePage() {
                         }}>
                             <strong style={{color: 'var(--light)', display: 'block', marginBottom: '10px'}}>Storage limits per account</strong>
                             <ul style={{margin: 0}}>
-                                <li><strong>50 MB</strong> per account (free tier)</li>
+                                <li><strong>5 MB</strong> per account (free tier)</li>
                                 <li>Each item averages <strong>~1–3 KB</strong> depending on notes and seasons</li>
                                 <li>A typical watchlist of <strong>500 shows/movies</strong> uses roughly 1–2 MB</li>
-                                <li>At maximum capacity you could store approximately <strong>15,000–50,000 entries</strong></li>
-                                <li>In practice you will never hit the limit through normal use</li>
+                                <li>At maximum capacity you could store approximately <strong>1,500–5,000 entries</strong></li>
+                                <li>In practice most users will never hit the limit through normal use</li>
                             </ul>
                         </div>
                     </div>
