@@ -39,6 +39,12 @@ export function useWatchlist() {
         if (!isAuthenticated || !user || cloudLoadedRef.current || !mounted) return;
         cloudLoadedRef.current = true;
 
+        // Skip cloud pull if user just imported — local data is already correct
+        if (localStorage.getItem('justImported') === 'true') {
+            localStorage.removeItem('justImported');
+            return;
+        }
+
         getWatchlistFromCloud(user.id).then(cloudData => {
             if (cloudData?.watchlistData && Array.isArray(cloudData.watchlistData) && cloudData.watchlistData.length > 0) {
                 const data: WatchlistItem[] = cloudData.watchlistData;
@@ -254,6 +260,7 @@ export function useWatchlist() {
         });
         // Save to localStorage first
         localStorage.setItem('watchlistData', JSON.stringify(newItems));
+        localStorage.setItem('justImported', 'true');
         setItems(newItems);
 
         // Push to cloud immediately, then reload so cloud pull gets the new data
