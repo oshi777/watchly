@@ -765,6 +765,8 @@ function setupEventListeners() {
         const exportData = {
             watchlistData: watchlistData,
             rankings: rankingsWithNames,
+            leaderboardRankings: JSON.parse(localStorage.getItem('rankings') || '[]'),
+            quickAccess: JSON.parse(localStorage.getItem('quickAccessOrder') || '[]'),
             timestamp: new Date().toISOString()
         };
         const data = JSON.stringify(exportData, null, 2);

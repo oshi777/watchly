@@ -250,6 +250,18 @@ export function useWatchlist() {
                 }
                 localStorage.setItem('watchlistRankings', JSON.stringify(rankingIds));
             }
+            // Restore leaderboard rankings from vanilla export
+            if (data.leaderboardRankings?.length) {
+                localStorage.setItem('rankings', JSON.stringify(data.leaderboardRankings));
+            }
+            // Restore pinned items — vanilla uses quickAccess array of IDs
+            if (data.quickAccess?.length) {
+                // Convert plain ID array to {itemId} objects used by Next.js
+                const qa = data.quickAccess.map((id: any) =>
+                    typeof id === 'string' ? { itemId: id } : id
+                );
+                localStorage.setItem('quickAccess', JSON.stringify(qa));
+            }
         }
         newItems.forEach((item, i) => {
             if (!item.id) item.id = 'item_' + Date.now() + '_' + i;
