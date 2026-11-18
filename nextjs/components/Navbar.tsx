@@ -2,7 +2,7 @@
 import Link from 'next/link';
 import { useState, useEffect } from 'react';
 import { usePathname } from 'next/navigation';
-import AuthButton from '@/components/AuthButton';
+import AccountPanel from '@/components/AuthButton';
 
 export default function Navbar() {
     const [menuOpen, setMenuOpen] = useState(false);
@@ -12,8 +12,6 @@ export default function Navbar() {
         { href: '/', label: 'Home' },
         { href: '/search', label: 'Browse' },
         { href: '/leaderboard', label: 'Leaderboard' },
-        { href: '/backup', label: 'Backup' },
-        { href: '/guide', label: 'Guide' },
         { href: '/history', label: 'History' },
         { href: '/settings', label: 'Settings' },
     ];
@@ -26,7 +24,6 @@ export default function Navbar() {
         }
     }, [menuOpen]);
 
-    // Hide leaderboard link if disabled
     const [leaderboardEnabled, setLeaderboardEnabled] = useState(true);
     useEffect(() => {
         setLeaderboardEnabled(localStorage.getItem('leaderboardEnabled') !== 'false');
@@ -40,10 +37,23 @@ export default function Navbar() {
     return (
         <>
             <nav className="navbar">
-                <div className="nav-brand" style={{fontSize: '0.75rem'}}>Watchly</div>
-                <div style={{marginLeft: 'auto', marginRight: '12px'}}>
-                    <AuthButton />
+                {/* Left — brand */}
+                <div className="nav-brand">Watchly</div>
+
+                {/* Center — nav links (inline on desktop) */}
+                <div className="nav-links-inline">
+                    {visibleLinks.map(link => (
+                        <Link
+                            key={link.href}
+                            href={link.href}
+                            className={`nav-link ${pathname === link.href ? 'active-nav' : ''}`}
+                        >
+                            {link.label}
+                        </Link>
+                    ))}
                 </div>
+
+                {/* Mobile hamburger */}
                 <button
                     className={`hamburger ${menuOpen ? 'open' : ''}`}
                     aria-label="Menu"
@@ -52,6 +62,8 @@ export default function Navbar() {
                 >
                     <span></span><span></span><span></span>
                 </button>
+
+                {/* Mobile dropdown */}
                 <div className={`nav-links ${menuOpen ? 'open' : ''}`} id="navLinks">
                     <div className="nav-menu-container">
                         {visibleLinks.map(link => (
@@ -59,7 +71,6 @@ export default function Navbar() {
                                 key={link.href}
                                 href={link.href}
                                 className={`nav-link ${pathname === link.href ? 'active-nav' : ''}`}
-                                style={{fontSize: '0.7rem'}}
                                 onClick={() => setMenuOpen(false)}
                             >
                                 {link.label}
@@ -67,6 +78,9 @@ export default function Navbar() {
                         ))}
                     </div>
                 </div>
+
+                {/* Right — Account tab */}
+                <AccountPanel />
             </nav>
             <div
                 className={`site-blur-overlay ${menuOpen ? 'active' : ''}`}
