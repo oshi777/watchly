@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Watchly Preview</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css?v=7">
+    <style>
+        /* Hide navbar and header */
+        .navbar {
+            display: none !important;
+        }
+        
+        header {
+            display: none !important;
+        }
+        
+        /* Hide Quick Access section */
+        .currently-watching-section {
+            display: none !important;
+        }
+        
+        /* Adjust body padding */
+        body {
+            padding-top: 20px !important;
+        }
+        
+        /* Adjust container */
+        .container {
+            padding-top: 20px !important;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <main>
+            <div class="stats">
+                <div class="stat-item">
+                    <span class="stat-number" id="totalCount">0</span>
+                    <span class="stat-label">Total Items</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number" id="watchedCount">0</span>
+                    <span class="stat-label">Watched</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number" id="upcomingCount">0</span>
+                    <span class="stat-label">Upcoming</span>
+                </div>
+            </div>
+            
+            <div class="watchlist" id="watchlist"></div>
+        </main>
+    </div>
+
+    <script>
+        const TMDB_TOKEN = 'eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI3YTgzYTQ5NWFiMTg0ZGQzMjEzYmVjMjVkMzE2MDc3NiIsIm5iZiI6MTc0OTk1NDQ3Ni44MTcsInN1YiI6IjY4NGUyZmFjNGEzZTQ0Y2Y2ODI5NGM2OSIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.OGP__W2OeeziBS4zsFtFWxcqnSwb7-IZ_7XUGGLGcGE';
+        const TMDB_IMAGE_BASE = 'https://image.tmdb.org/t/p/w342';
+        
+        // Hardcoded popular shows for preview
+        const previewShows = [
+            { id: 1, title: 'Breaking Bad', status: 'watched', genres: ['Crime', 'Drama', 'Thriller'], year: '2008', date: '2024', isMovie: false, tmdbId: 1396, poster: null },
+            { id: 2, title: 'The Last of Us', status: 'watched', genres: ['Sci-Fi & Fantasy', 'Drama', 'Action & Adventure'], year: '2023', date: '2024', isMovie: false, tmdbId: 100088, poster: null },
+            { id: 3, title: 'Stranger Things', status: 'pending', genres: ['Sci-Fi & Fantasy', 'Mystery', 'Drama'], year: '2016', date: '', isMovie: false, tmdbId: 66732, poster: null },
+            { id: 4, title: 'Game of Thrones', status: 'watched', genres: ['Sci-Fi & Fantasy', 'Drama', 'Action & Adventure'], year: '2011', date: '2023', isMovie: false, tmdbId: 1399, poster: null },
+            { id: 5, title: 'The Witcher', status: 'pending', genres: ['Action & Adventure', 'Sci-Fi & Fantasy', 'Drama'], year: '2019', date: '', isMovie: false, tmdbId: 71912, poster: null },
+            { id: 6, title: 'House of the Dragon', status: 'pending', genres: ['Sci-Fi & Fantasy', 'Drama', 'Action & Adventure'], year: '2022', date: '', isMovie: false, tmdbId: 94997, poster: null },
+            { id: 7, title: 'The Crown', status: 'watched', genres: ['Drama'], year: '2016', date: '2023', isMovie: false, tmdbId: 73375, poster: null },
+            { id: 8, title: 'Peaky Blinders', status: 'watched', genres: ['Crime', 'Drama'], year: '2013', date: '2023', isMovie: false, tmdbId: 60574, poster: null },
+            { id: 9, title: 'Dark', status: 'watched', genres: ['Crime', 'Drama', 'Mystery', 'Sci-Fi & Fantasy'], year: '2017', date: '2023', isMovie: false, tmdbId: 70523, poster: null },
+            { id: 10, title: 'Better Call Saul', status: 'watched', genres: ['Crime', 'Drama'], year: '2015', date: '2023', isMovie: false, tmdbId: 60059, poster: null },
+            { id: 11, title: 'Wednesday', status: 'pending', genres: ['Sci-Fi & Fantasy', 'Mystery', 'Comedy'], year: '2022', date: '', isMovie: false, tmdbId: 119051, poster: null },
+            { id: 12, title: 'Succession', status: 'watched', genres: ['Drama'], year: '2018', date: '2023', isMovie: false, tmdbId: 76331, poster: null }
+        ];
+
+        // Initialize with preview shows in localStorage
+        localStorage.setItem('watchlist', JSON.stringify(previewShows));
+        localStorage.removeItem('quickAccess'); // No quick access
+    </script>
+    
+    <script src="script.js"></script>
+    
+    <script>
+        // Fetch posters from TMDB for all shows
+        async function fetchPreviewPosters() {
+            const headers = { 'Authorization': `Bearer ${TMDB_TOKEN}` };
+            const watchlist = JSON.parse(localStorage.getItem('watchlist') || '[]');
+            
+            for (let show of watchlist) {
+                if (show.tmdbId && !show.poster) {
+                    try {
+                        const endpoint = show.isMovie ? 'movie' : 'tv';
+                        const response = await fetch(`https://api.themoviedb.org/3/${endpoint}/${show.tmdbId}`, { headers });
+                        const data = await response.json();
+                        if (data.poster_path) {
+                            show.poster = TMDB_IMAGE_BASE + data.poster_path;
+                        }
+                    } catch (error) {
+                        console.error(`Error fetching poster for ${show.title}:`, error);
+                    }
+                }
+            }
+            
+            // Save updated shows with posters
+            localStorage.setItem('watchlist', JSON.stringify(watchlist));
+            
+            // Re-render to show posters
+            if (typeof renderWatchlist === 'function') {
+                renderWatchlist();
+            }
+        }
+
+        // Wait for page to load, then fetch posters
+        window.addEventListener('load', function() {
+            // Fetch posters after initial render
+            setTimeout(fetchPreviewPosters, 500);
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,1406 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Watchly - Settings</title>
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://unpkg.com/lucide-static@0.453.0/font/lucide.css">
+    <link rel="stylesheet" href="styles.css?v=7">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-brand" style="font-size: 0.75rem;">Watchly</div>
+        <button class="hamburger" id="hamburger" aria-label="Menu">
+            <span></span><span></span><span></span>
+        </button>
+        <div class="nav-links" id="navLinks">
+            <div class="nav-menu-container">
+                <a href="index.html" class="nav-link" style="font-size: 0.7rem;">Home</a>
+                <a href="search.html" class="nav-link" style="font-size: 0.7rem;">Browse</a>
+                <a href="leaderboard.html" class="nav-link" style="font-size: 0.7rem;" id="leaderboardNavLink">Leaderboard</a>
+                <a href="backup.html" class="nav-link" style="font-size: 0.7rem;">Backup</a>
+                <a href="guide.html" class="nav-link" style="font-size: 0.7rem;">Guide</a>
+                <a href="history.html" class="nav-link" style="font-size: 0.7rem;">History</a>
+                <a href="settings.html" class="nav-link active-nav" style="font-size: 0.7rem;">Settings</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Site blur overlay -->
+    <div class="site-blur-overlay" id="siteBlur"></div>
+
+    <!-- Reset Confirmation Modal -->
+    <div class="modal-overlay" id="resetModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Reset to Defaults?</h2>
+            </div>
+            <div class="modal-body">
+                <p>This will reset all settings to their default values:</p>
+                <ul style="margin: 15px 0; padding-left: 20px; color: var(--silver); line-height: 1.8;">
+                    <li>Theme: Dark</li>
+                    <li>Quick Access: Enabled</li>
+                    <li>Leaderboard: Enabled</li>
+                    <li>Backup Sync Mode: Merge Mode</li>
+                    <li>List Grouping: With Section Headers</li>
+                    <li>Poster Display: Crop to Fill</li>
+                </ul>
+                <p style="color: var(--silver); font-size: 0.9rem;">Netflix, Prime, and Light themes will be reset to Dark.</p>
+            </div>
+            <div class="modal-footer">
+                <button id="cancelReset" class="modal-btn cancel-btn">Cancel</button>
+                <button id="confirmReset" class="modal-btn confirm-btn">Reset to Defaults</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <header>
+            <h1>Settings</h1>
+            <p>Customize your Watchly experience</p>
+            <button id="resetToDefaults" class="add-btn" style="margin-top: 15px;">Reset to Defaults</button>
+        </header>
+
+        <main>
+            <div class="settings-container">
+                
+                <!-- Theme Setting -->
+                <div class="settings-card">
+                    <div class="settings-card-header">
+                        <h3>Theme</h3>
+                        <p>Choose your preferred color scheme for the entire application</p>
+                    </div>
+                    
+                    <div class="display-options">
+                        <!-- Option 1: Dark Theme (default) -->
+                        <label class="display-option selected" id="optionDarkTheme">
+                            <input type="radio" name="theme" value="dark" checked>
+                            <div class="option-preview theme-preview dark-preview">
+                                <div class="theme-demo">
+                                    <div class="theme-header"></div>
+                                    <div class="theme-content">
+                                        <div class="theme-card"></div>
+                                        <div class="theme-card"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="option-label">
+                                <span class="option-name">Dark (Default)</span>
+                                <span class="option-desc">Dark background with light text. Easy on the eyes in low-light environments.</span>
+                            </div>
+                        </label>
+
+                        <!-- Option 2: Light Theme -->
+                        <label class="display-option" id="optionLightTheme">
+                            <input type="radio" name="theme" value="light">
+                            <div class="option-preview theme-preview light-preview">
+                                <div class="theme-demo">
+                                    <div class="theme-header"></div>
+                                    <div class="theme-content">
+                                        <div class="theme-card"></div>
+                                        <div class="theme-card"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="option-label">
+                                <span class="option-name">Light</span>
+                                <span class="option-desc">Light background with dark text. Better for bright environments and daytime use.</span>
+                            </div>
+                        </label>
+
+                        <!-- Option 3: Netflix Theme -->
+                        <label class="display-option" id="optionNetflixTheme">
+                            <input type="radio" name="theme" value="netflix">
+                            <div class="option-preview theme-preview netflix-preview">
+                                <div class="theme-demo">
+                                    <div class="theme-header"></div>
+                                    <div class="theme-content">
+                                        <div class="theme-card"></div>
+                                        <div class="theme-card"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="option-label">
+                                <span class="option-name">Netflix</span>
+                                <span class="option-desc">Inspired by Netflix with deep blacks and red accents. Perfect for a cinematic feel.</span>
+                            </div>
+                        </label>
+
+                        <!-- Option 4: Prime Theme -->
+                        <label class="display-option" id="optionPrimeTheme">
+                            <input type="radio" name="theme" value="prime">
+                            <div class="option-preview theme-preview prime-preview">
+                                <div class="theme-demo">
+                                    <div class="theme-header"></div>
+                                    <div class="theme-content">
+                                        <div class="theme-card"></div>
+                                        <div class="theme-card"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="option-label">
+                                <span class="option-name">Prime</span>
+                                <span class="option-desc">Amazon Prime inspired with dark blue tones and cyan accents. Sleek and modern.</span>
+                            </div>
+                        </label>
+                    </div>
+                </div>
+                
+                <!-- Card Display Mode -->
+                <div class="settings-card">
+                    <div class="settings-card-header">
+                        <h3>Poster Display Mode</h3>
+                        <p>Choose how movie and show posters are displayed in detail views</p>
+                    </div>
+
+                    <div class="display-options">
+
+                        <!-- Option 1: Cover (default) -->
+                        <label class="display-option selected" id="optionCover">
+                            <input type="radio" name="posterMode" value="cover" checked>
+                            <div class="option-preview cover-preview">
+                                <div class="preview-poster cover-poster">
+                                    <div class="preview-img-wrap cover-wrap">
+                                        <div class="preview-img-inner"></div>
+                                    </div>
+                                </div>
+                                <div class="preview-lines">
+                                    <div class="preview-line w80"></div>
+                                    <div class="preview-line w50"></div>
+                                    <div class="preview-line w95"></div>
+                                    <div class="preview-line w70"></div>
+                                </div>
+                            </div>
+                            <div class="option-label">
+                                <span class="option-name">Crop to Fill (Default)</span>
+                                <span class="option-desc">Poster fills entire space, may crop top/bottom or sides to maintain aspect ratio</span>
+                            </div>
+                        </label>
+
+                        <!-- Option 2: Contain (full poster) -->
+                        <label class="display-option" id="optionContain">
+                            <input type="radio" name="posterMode" value="contain">
+                            <div class="option-preview contain-preview">
+                                <div class="preview-poster contain-poster">
+                                    <div class="preview-img-wrap contain-wrap">
+                                        <div class="preview-img-inner"></div>
+                                    </div>
+                                </div>
+                                <div class="preview-lines">
+                                    <div class="preview-line w80"></div>
+                                    <div class="preview-line w50"></div>
+                                    <div class="preview-line w95"></div>
+                                    <div class="preview-line w70"></div>
+                                </div>
+                            </div>
+                            <div class="option-label">
+                                <span class="option-name">Show Full Poster</span>
+                                <span class="option-desc">Entire poster visible with no cropping, dark bars may appear above/below or on sides</span>
+                            </div>
+                        </label>
+
+                    </div>
+                </div>
+
+                <!-- List Grouping -->
+                <div class="settings-card">
+                    <div class="settings-card-header">
+                        <h3>List Grouping</h3>
+                        <p>Choose how your watchlist items are organized on the main page</p>
+                    </div>
+                    
+                    <div class="display-options">
+                        <!-- Option 1: With Separators (default) -->
+                        <label class="display-option selected" id="optionWithSeparators">
+                            <input type="radio" name="listGrouping" value="with-separators" checked>
+                            <div class="option-preview grouping-preview">
+                                <div class="preview-group">
+                                    <div class="preview-separator">A</div>
+                                    <div class="preview-items">
+                                        <div class="preview-item"></div>
+                                        <div class="preview-item"></div>
+                                    </div>
+                                </div>
+                                <div class="preview-group">
+                                    <div class="preview-separator">B</div>
+                                    <div class="preview-items">
+                                        <div class="preview-item"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="option-label">
+                                <span class="option-name">With Section Headers</span>
+                                <span class="option-desc">Show alphabetical separators like "0-9", "A", "B", etc. to organize your list</span>
+                            </div>
+                        </label>
+
+                        <!-- Option 2: Continuous List -->
+                        <label class="display-option" id="optionContinuous">
+                            <input type="radio" name="listGrouping" value="continuous">
+                            <div class="option-preview grouping-preview">
+                                <div class="preview-continuous">
+                                    <div class="preview-item"></div>
+                                    <div class="preview-item"></div>
+                                    <div class="preview-item"></div>
+                                    <div class="preview-item"></div>
+                                    <div class="preview-item"></div>
+                                </div>
+                            </div>
+                            <div class="option-label">
+                                <span class="option-name">Continuous List</span>
+                                <span class="option-desc">Hide section headers for a clean, uninterrupted list (items still sorted alphabetically)</span>
+                            </div>
+                        </label>
+                    </div>
+                </div>
+                
+                <!-- Quick Access Settings -->
+                <div class="settings-card">
+                    <div class="settings-card-header">
+                        <h3>Quick Access</h3>
+                        <p>Show a dedicated section for pinned shows and movies at the top of your home page</p>
+                    </div>
+                    
+                    <div class="display-options">
+                        <!-- Option 1: Enabled (default) -->
+                        <label class="display-option selected" id="optionQuickAccessEnabled">
+                            <input type="radio" name="quickAccess" value="enabled" checked>
+                            <div class="option-label">
+                                <span class="option-name">Enabled (Default)</span>
+                                <span class="option-desc">Display a dedicated section on the home page for pinned items. Shows are automatically removed when marked as watched.</span>
+                            </div>
+                        </label>
+
+                        <!-- Option 2: Disabled -->
+                        <label class="display-option" id="optionQuickAccessDisabled">
+                            <input type="radio" name="quickAccess" value="disabled">
+                            <div class="option-label">
+                                <span class="option-name">Disabled</span>
+                                <span class="option-desc">Hide the Quick Access section from the home page. Your pinned items are preserved if you re-enable it later.</span>
+                            </div>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Leaderboard Settings -->
+                <div class="settings-card">
+                    <div class="settings-card-header">
+                        <h3>Leaderboard</h3>
+                        <p>Enable or disable the leaderboard feature for ranking your favorite shows and movies</p>
+                    </div>
+                    
+                    <div class="display-options">
+                        <!-- Option 1: Enabled (default) -->
+                        <label class="display-option selected" id="optionLeaderboardEnabled">
+                            <input type="radio" name="leaderboard" value="enabled" checked>
+                            <div class="option-label">
+                                <span class="option-name">Enabled (Default)</span>
+                                <span class="option-desc">Show leaderboard in navigation and allow ranking items. Your rankings are preserved if you disable this.</span>
+                            </div>
+                        </label>
+
+                        <!-- Option 2: Disabled -->
+                        <label class="display-option" id="optionLeaderboardDisabled">
+                            <input type="radio" name="leaderboard" value="disabled">
+                            <div class="option-label">
+                                <span class="option-name">Disabled</span>
+                                <span class="option-desc">Hide leaderboard from navigation and pages. Your ranked list is preserved if you re-enable it later.</span>
+                            </div>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Backup Sync Mode -->
+                <div class="settings-card">
+                    <div class="settings-card-header">
+                        <h3>Backup Sync Mode</h3>
+                        <p>Choose how data is synced between devices when using GitHub Gist backup</p>
+                    </div>
+                    
+                    <div class="display-options">
+                        <!-- Option 1: Merge Mode (default) -->
+                        <label class="display-option selected" id="optionMerge">
+                            <input type="radio" name="syncMode" value="merge" checked>
+                            <div class="option-label">
+                                <span class="option-name">Merge Mode (Smart Sync) - Default</span>
+                                <span class="option-desc">Intelligently merges data from both devices using timestamps. New shows added on either device are combined. Deletions are tracked and synced. Conflicts resolved by using the newest version. Best for multi-device usage.</span>
+                            </div>
+                        </label>
+
+                        <!-- Option 2: Replace Mode -->
+                        <label class="display-option" id="optionReplace">
+                            <input type="radio" name="syncMode" value="replace">
+                            <div class="option-label">
+                                <span class="option-name">Replace Mode</span>
+                                <span class="option-desc">When syncing, remote backup completely replaces local data. Simple and reliable, but make sure to backup before syncing to avoid data loss. Best when using one primary device.</span>
+                            </div>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Timezone Setting -->
+                <div class="settings-card">
+                    <div class="settings-card-header">
+                        <h3>Timezone</h3>
+                        <p>Choose your timezone for accurate time display in history</p>
+                    </div>
+                    
+                    <div style="display: flex; flex-direction: column; gap: 12px;">
+                        <select id="timezoneSelect" style="padding: 12px; background: var(--surface); color: var(--light); border: 1px solid rgba(195,199,206,0.2); border-radius: 8px; font-size: 1rem; font-family: inherit; cursor: pointer;">
+                            <option value="auto">Auto-detect (Current: <span id="detectedTimezone"></span>)</option>
+                            <optgroup label="Americas">
+                                <option value="America/New_York">Eastern Time (New York)</option>
+                                <option value="America/Chicago">Central Time (Chicago)</option>
+                                <option value="America/Denver">Mountain Time (Denver)</option>
+                                <option value="America/Los_Angeles">Pacific Time (Los Angeles)</option>
+                                <option value="America/Anchorage">Alaska Time (Anchorage)</option>
+                                <option value="America/Honolulu">Hawaii Time (Honolulu)</option>
+                                <option value="America/Toronto">Eastern Time (Toronto)</option>
+                                <option value="America/Vancouver">Pacific Time (Vancouver)</option>
+                                <option value="America/Mexico_City">Central Time (Mexico City)</option>
+                                <option value="America/Sao_Paulo">Brasilia Time</option>
+                                <option value="America/Argentina/Buenos_Aires">Argentina Time</option>
+                            </optgroup>
+                            <optgroup label="Europe">
+                                <option value="Europe/London">London (GMT/BST)</option>
+                                <option value="Europe/Paris">Paris (CET/CEST)</option>
+                                <option value="Europe/Berlin">Berlin (CET/CEST)</option>
+                                <option value="Europe/Madrid">Madrid (CET/CEST)</option>
+                                <option value="Europe/Rome">Rome (CET/CEST)</option>
+                                <option value="Europe/Amsterdam">Amsterdam (CET/CEST)</option>
+                                <option value="Europe/Brussels">Brussels (CET/CEST)</option>
+                                <option value="Europe/Vienna">Vienna (CET/CEST)</option>
+                                <option value="Europe/Stockholm">Stockholm (CET/CEST)</option>
+                                <option value="Europe/Athens">Athens (EET/EEST)</option>
+                                <option value="Europe/Moscow">Moscow (MSK)</option>
+                            </optgroup>
+                            <optgroup label="Asia">
+                                <option value="Asia/Dubai">Dubai (GST)</option>
+                                <option value="Asia/Karachi">Karachi (PKT)</option>
+                                <option value="Asia/Kolkata">India (IST)</option>
+                                <option value="Asia/Dhaka">Bangladesh (BST)</option>
+                                <option value="Asia/Bangkok">Bangkok (ICT)</option>
+                                <option value="Asia/Singapore">Singapore (SGT)</option>
+                                <option value="Asia/Hong_Kong">Hong Kong (HKT)</option>
+                                <option value="Asia/Shanghai">China (CST)</option>
+                                <option value="Asia/Tokyo">Japan (JST)</option>
+                                <option value="Asia/Seoul">South Korea (KST)</option>
+                            </optgroup>
+                            <optgroup label="Oceania">
+                                <option value="Australia/Sydney">Sydney (AEDT/AEST)</option>
+                                <option value="Australia/Melbourne">Melbourne (AEDT/AEST)</option>
+                                <option value="Australia/Brisbane">Brisbane (AEST)</option>
+                                <option value="Australia/Perth">Perth (AWST)</option>
+                                <option value="Pacific/Auckland">Auckland (NZDT/NZST)</option>
+                            </optgroup>
+                            <optgroup label="Africa">
+                                <option value="Africa/Cairo">Cairo (EET)</option>
+                                <option value="Africa/Johannesburg">Johannesburg (SAST)</option>
+                                <option value="Africa/Lagos">Lagos (WAT)</option>
+                                <option value="Africa/Nairobi">Nairobi (EAT)</option>
+                            </optgroup>
+                        </select>
+                        <p style="color: var(--silver); font-size: 0.85rem; margin: 0;">
+                            Current time in selected timezone: <strong id="currentTimeDisplay">--:-- --</strong>
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Trakt.tv Integration -->
+                <div class="settings-card">
+                    <div class="settings-card-header">
+                        <h3>Trakt.tv Integration</h3>
+                        <p>Connect with Trakt.tv to automatically sync your watch history from Netflix, Prime Video, and other streaming services</p>
+                    </div>
+                    
+                    <div id="traktNotConnected" style="display: block;">
+                        <p style="color: var(--silver); margin-bottom: 15px; font-size: 0.9rem;">
+                            <strong>How it works:</strong><br>
+                            1. Create a free <a href="https://trakt.tv" target="_blank" style="color: var(--light);">Trakt.tv account</a><br>
+                            2. Install the <a href="https://trakt.tv/apps" target="_blank" style="color: var(--light);">Trakt browser extension</a> to auto-track streaming<br>
+                            3. Connect your Trakt account below<br>
+                            4. Your watch history syncs automatically!
+                        </p>
+                        <button id="connectTraktBtn" class="add-btn" style="width: 100%;">Connect Trakt.tv Account</button>
+                    </div>
+                    
+                    <div id="traktConnected" style="display: none;">
+                        <div style="background: rgba(40,167,69,0.1); border: 1px solid rgba(40,167,69,0.3); border-radius: 8px; padding: 15px; margin-bottom: 15px;">
+                            <p style="color: #28a745; font-weight: 600; margin: 0;">✓ Connected to Trakt.tv</p>
+                            <p style="color: var(--silver); margin: 5px 0 0 0; font-size: 0.85rem;">Username: <span id="traktUsername"></span></p>
+                        </div>
+                        <div style="display: flex; gap: 10px;">
+                            <button id="syncTraktBtn" class="add-btn" style="flex: 1;">Sync Now</button>
+                            <button id="disconnectTraktBtn" class="delete-btn" style="flex: 1;">Disconnect</button>
+                        </div>
+                        <p style="color: var(--silver); margin-top: 10px; font-size: 0.85rem;">
+                            Last synced: <span id="lastTraktSync">Never</span>
+                        </p>
+                    </div>
+                </div>
+                        </label>
+                    </div>
+                </div>
+
+            </div>
+        </main>
+    </div>
+
+    <style>
+        .active-nav {
+            background: var(--muted);
+            color: var(--light) !important;
+        }
+
+        .settings-container {
+            max-width: 700px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .settings-card {
+            padding: 30px 0;
+            border-bottom: 1px solid rgba(195,199,206,0.15);
+        }
+
+        .settings-card:last-child {
+            border-bottom: none;
+        }
+
+        .settings-card-header {
+            margin-bottom: 24px;
+        }
+
+        .settings-card-header h3 {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--light);
+            margin-bottom: 6px;
+        }
+
+        .settings-card-header p {
+            font-size: 0.88rem;
+            color: var(--silver);
+        }
+
+        /* Toggle Setting Styles */
+        .toggle-setting {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .toggle-label {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            cursor: pointer;
+            padding: 12px;
+            border-radius: 8px;
+            transition: background 0.2s ease;
+        }
+
+        .toggle-label:hover {
+            background: rgba(195,199,206,0.03);
+        }
+
+        .toggle-switch {
+            position: relative;
+            width: 44px;
+            height: 24px;
+            background: var(--muted);
+            border-radius: 12px;
+            transition: background 0.3s ease;
+            flex-shrink: 0;
+        }
+
+        .toggle-slider {
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            width: 20px;
+            height: 20px;
+            background: var(--light);
+            border-radius: 50%;
+            transition: transform 0.3s ease;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+
+        .toggle-label input[type="checkbox"] {
+            display: none;
+        }
+
+        .toggle-label input[type="checkbox"]:checked + .toggle-switch {
+            background: var(--silver);
+        }
+
+        .toggle-label input[type="checkbox"]:checked + .toggle-switch .toggle-slider {
+            transform: translateX(20px);
+        }
+
+        .toggle-text {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .toggle-title {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--light);
+        }
+
+        .toggle-desc {
+            font-size: 0.85rem;
+            color: var(--silver);
+            line-height: 1.4;
+        }
+
+        .display-options {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+
+        .display-option {
+            display: flex;
+            align-items: center;
+            gap: 18px;
+            padding: 18px;
+            border: 2px solid rgba(195,199,206,0.1);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            background: transparent;
+        }
+
+        .display-option:hover {
+            border-color: rgba(195,199,206,0.25);
+            background: rgba(195,199,206,0.03);
+        }
+
+        .display-option input[type="radio"] {
+            display: none;
+        }
+
+        .display-option.selected {
+            border-color: var(--silver);
+            background: rgba(195,199,206,0.05);
+        }
+
+        /* Theme-specific borders for theme previews */
+        .display-option.selected .dark-preview {
+            border: 2px solid rgba(195, 199, 206, 0.5);
+        }
+
+        .display-option.selected .light-preview {
+            border: 2px solid rgba(200, 200, 200, 0.8);
+        }
+
+        .display-option.selected .netflix-preview {
+            border: 2px solid #E50914;
+        }
+
+        .display-option.selected .prime-preview {
+            border: 2px solid #00A8E1;
+        }
+
+        /* Default theme preview borders (non-selected) */
+        .dark-preview {
+            border: 2px solid rgba(195, 199, 206, 0.2);
+        }
+
+        .light-preview {
+            border: 2px solid rgba(200, 200, 200, 0.3);
+        }
+
+        .netflix-preview {
+            border: 2px solid rgba(229, 9, 20, 0.3);
+        }
+
+        .prime-preview {
+            border: 2px solid rgba(0, 168, 225, 0.3);
+        }
+
+        /* mini preview mockup */
+        .option-preview {
+            display: flex;
+            gap: 8px;
+            flex-shrink: 0;
+            background: #0d0e12;
+            border-radius: 8px;
+            padding: 8px;
+            width: 130px;
+            height: 80px;
+            align-items: center;
+        }
+
+        .preview-poster {
+            flex-shrink: 0;
+            width: 40px;
+            height: 64px;
+            border-radius: 4px;
+            overflow: hidden;
+            background: #1a1d23;
+        }
+
+        .preview-img-wrap {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* cover: fills full height, slight horizontal clip visual */
+        .cover-wrap .preview-img-inner {
+            width: 110%;
+            height: 100%;
+            background: linear-gradient(160deg, #3a3f4a, #555b66);
+            border-radius: 2px;
+        }
+
+        /* contain: full image visible with letterbox bars */
+        .contain-wrap {
+            flex-direction: column;
+            background: #0d0e12;
+        }
+        .contain-wrap .preview-img-inner {
+            width: 90%;
+            height: 78%;
+            background: linear-gradient(160deg, #3a3f4a, #555b66);
+            border-radius: 2px;
+        }
+
+        .preview-lines {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+            justify-content: center;
+        }
+
+        .preview-line {
+            height: 4px;
+            background: rgba(195,199,206,0.2);
+            border-radius: 2px;
+        }
+        .w50 { width: 50%; }
+        .w70 { width: 70%; }
+        .w80 { width: 80%; }
+        .w95 { width: 95%; }
+
+        /* Grouping preview styles */
+        .grouping-preview {
+            flex-direction: column;
+            gap: 4px;
+            padding: 6px;
+            overflow: hidden;
+        }
+
+        .preview-group {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .preview-separator {
+            font-size: 8px;
+            font-weight: bold;
+            color: var(--silver);
+            padding: 2px 0 1px 0;
+            background: transparent;
+            border-bottom: 1px solid rgba(195,199,206,0.3);
+            border-radius: 0;
+            width: 100%;
+            text-align: center;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .preview-items {
+            display: grid;
+            grid-template-columns: repeat(3, 15px);
+            gap: 2px;
+            margin-top: 2px;
+            justify-content: flex-start;
+        }
+
+        .preview-item {
+            width: 15px;
+            height: 20px;
+            background: linear-gradient(135deg, rgba(195,199,206,0.4) 0%, rgba(195,199,206,0.2) 100%);
+            border-radius: 2px;
+            border: 1px solid rgba(195,199,206,0.2);
+            flex-shrink: 0;
+        }
+
+        .preview-continuous {
+            display: grid;
+            grid-template-columns: repeat(4, 15px);
+            gap: 3px;
+            align-items: flex-start;
+            justify-content: flex-start;
+        }
+
+        .preview-continuous .preview-item {
+            width: 15px;
+            height: 20px;
+        }
+
+        .option-label {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .option-name {
+            font-size: 1rem;
+            font-weight: 700;
+            color: var(--light);
+        }
+
+        .option-desc {
+            font-size: 0.8rem;
+            color: var(--silver);
+            line-height: 1.45;
+        }
+
+        /* Theme preview styles */
+        .theme-preview {
+            width: 130px;
+            height: 80px;
+            border-radius: 6px;
+            overflow: hidden;
+        }
+
+        .theme-demo {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .theme-header {
+            height: 20%;
+            width: 100%;
+        }
+
+        .theme-content {
+            flex: 1;
+            padding: 4px;
+            display: flex;
+            flex-direction: column;
+            gap: 3px;
+        }
+
+        .theme-card {
+            flex: 1;
+            border-radius: 3px;
+        }
+
+        /* Dark theme preview */
+        .dark-preview .theme-demo {
+            background: #0B0C0E;
+        }
+
+        .dark-preview .theme-header {
+            background: #1E2126;
+            border-bottom: 1px solid rgba(195, 199, 206, 0.1);
+        }
+
+        .dark-preview .theme-card {
+            background: #1E2126;
+            border: 1px solid rgba(195, 199, 206, 0.1);
+        }
+
+        /* Light theme preview */
+        .light-preview .theme-demo {
+            background: #FFFFFF;
+        }
+
+        .light-preview .theme-header {
+            background: #F5F5F5;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+        }
+
+        .light-preview .theme-card {
+            background: #F5F5F5;
+            border: 1px solid rgba(0, 0, 0, 0.1);
+        }
+
+        /* Netflix theme preview */
+        .netflix-preview .theme-demo {
+            background: #141414;
+        }
+
+        .netflix-preview .theme-header {
+            background: #141414;
+            border-bottom: 1px solid rgba(229, 9, 20, 0.3);
+        }
+
+        .netflix-preview .theme-card {
+            background: #1F1F1F;
+            border: 1px solid rgba(229, 9, 20, 0.2);
+        }
+
+        /* Prime theme preview */
+        .prime-preview .theme-demo {
+            background: #0F171E;
+        }
+
+        .prime-preview .theme-header {
+            background: #0F171E;
+            border-bottom: 1px solid rgba(0, 168, 225, 0.3);
+        }
+
+        .prime-preview .theme-card {
+            background: #1A2632;
+            border: 1px solid rgba(0, 168, 225, 0.2);
+        }
+
+        /* Modal Styles */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.75);
+            backdrop-filter: blur(4px);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 10000;
+            animation: fadeIn 0.2s ease;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes slideUp {
+            from { 
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to { 
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .modal-content {
+            background: var(--surface);
+            border: 1px solid rgba(195, 199, 206, 0.2);
+            border-radius: 12px;
+            padding: 0;
+            max-width: 480px;
+            width: 90%;
+            animation: slideUp 0.3s ease;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+        }
+
+        .modal-header {
+            padding: 24px 24px 16px 24px;
+            border-bottom: 1px solid rgba(195, 199, 206, 0.15);
+        }
+
+        .modal-header h2 {
+            margin: 0;
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--light);
+        }
+
+        .modal-body {
+            padding: 20px 24px;
+        }
+
+        .modal-body p {
+            margin: 0 0 10px 0;
+            color: var(--light);
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+
+        .modal-body ul {
+            margin: 15px 0;
+            padding-left: 20px;
+            color: var(--silver);
+            line-height: 1.8;
+        }
+
+        .modal-body ul li {
+            font-size: 0.9rem;
+        }
+
+        .modal-footer {
+            padding: 16px 24px 24px 24px;
+            display: flex;
+            gap: 12px;
+            justify-content: flex-end;
+        }
+
+        .modal-btn {
+            padding: 10px 24px;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            border: none;
+            outline: none;
+        }
+
+        .cancel-btn {
+            background: transparent;
+            color: var(--silver);
+            border: 1px solid rgba(195, 199, 206, 0.2);
+        }
+
+        .cancel-btn:hover {
+            background: rgba(195, 199, 206, 0.05);
+            border-color: rgba(195, 199, 206, 0.3);
+        }
+
+        .confirm-btn {
+            background: var(--silver);
+            color: var(--dark);
+        }
+
+        .confirm-btn:hover {
+            background: var(--light);
+            transform: translateY(-1px);
+        }
+
+        .confirm-btn:active {
+            transform: translateY(0);
+        }
+
+        @media (max-width: 480px) {
+            .modal-content {
+                width: 95%;
+            }
+
+            .modal-header {
+                padding: 20px 20px 14px 20px;
+            }
+
+            .modal-header h2 {
+                font-size: 1.15rem;
+            }
+
+            .modal-body {
+                padding: 16px 20px;
+            }
+
+            .modal-footer {
+                padding: 14px 20px 20px 20px;
+                flex-direction: column-reverse;
+            }
+
+            .modal-btn {
+                width: 100%;
+            }
+        }
+
+        .saved-toast {
+            position: fixed;
+            bottom: 24px;
+            left: 50%;
+            transform: translateX(-50%) translateY(60px);
+            background: var(--surface);
+            color: var(--light);
+            border: 1px solid var(--silver);
+            padding: 10px 24px;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: transform 0.3s ease, opacity 0.3s ease;
+            opacity: 0;
+            z-index: 9999;
+        }
+        .saved-toast.show {
+            transform: translateX(-50%) translateY(0);
+            opacity: 1;
+        }
+
+        @media (max-width: 768px) {
+            .settings-container { padding: 0 4px; }
+            .settings-card { padding: 20px; }
+            .display-option { gap: 14px; padding: 16px; }
+            .option-name { font-size: 0.95rem; }
+            .option-desc { font-size: 0.78rem; }
+        }
+        @media (max-width: 480px) {
+            .settings-card { padding: 14px; }
+            .display-option { gap: 10px; padding: 12px; flex-wrap: nowrap; }
+            .option-preview { width: 80px; height: 58px; padding: 5px; flex-shrink: 0; }
+            .preview-poster { width: 24px; height: 40px; }
+            .option-name { font-size: 0.88rem; }
+            .option-desc { font-size: 0.74rem; }
+        }
+    </style>
+
+    <div class="saved-toast" id="savedToast">Settings saved</div>
+
+    <script src="trakt.js"></script>
+    <script>
+        const MODES = { cover: 'cover', contain: 'contain' };
+
+        function getCurrentMode() {
+            return localStorage.getItem('posterDisplayMode') || 'cover';
+        }
+
+        function applySelection(mode) {
+            // Remove selected from posterMode options only
+            document.querySelectorAll('input[name="posterMode"]').forEach(radio => {
+                radio.closest('.display-option').classList.remove('selected');
+            });
+            const radio = document.querySelector(`input[name="posterMode"][value="${mode}"]`);
+            if (radio) {
+                radio.checked = true;
+                radio.closest('.display-option').classList.add('selected');
+            }
+        }
+
+        function showToast() {
+            const t = document.getElementById('savedToast');
+            t.classList.add('show');
+            setTimeout(() => t.classList.remove('show'), 2000);
+        }
+
+        document.querySelectorAll('input[name="posterMode"]').forEach(radio => {
+            radio.addEventListener('change', function () {
+                localStorage.setItem('posterDisplayMode', this.value);
+                applySelection(this.value);
+                showToast();
+            });
+        });
+
+        // Quick Access radio button functionality
+        function getCurrentQuickAccess() {
+            return localStorage.getItem('currentlyWatchingEnabled') !== 'false' ? 'enabled' : 'disabled';
+        }
+
+        function applyQuickAccessSelection(value) {
+            // Remove selected from quickAccess options only
+            document.querySelectorAll('input[name="quickAccess"]').forEach(radio => {
+                radio.closest('.display-option').classList.remove('selected');
+            });
+            const radio = document.querySelector(`input[name="quickAccess"][value="${value}"]`);
+            if (radio) {
+                radio.checked = true;
+                radio.closest('.display-option').classList.add('selected');
+            }
+        }
+
+        document.querySelectorAll('input[name="quickAccess"]').forEach(radio => {
+            radio.addEventListener('change', function () {
+                const isEnabled = this.value === 'enabled';
+                localStorage.setItem('currentlyWatchingEnabled', isEnabled.toString());
+                applyQuickAccessSelection(this.value);
+                showToast();
+            });
+        });
+
+        // Leaderboard radio button functionality
+        function getCurrentLeaderboard() {
+            return localStorage.getItem('leaderboardEnabled') !== 'false' ? 'enabled' : 'disabled';
+        }
+
+        function applyLeaderboardSelection(value) {
+            // Remove selected from leaderboard options only
+            document.querySelectorAll('input[name="leaderboard"]').forEach(radio => {
+                radio.closest('.display-option').classList.remove('selected');
+            });
+            const radio = document.querySelector(`input[name="leaderboard"][value="${value}"]`);
+            if (radio) {
+                radio.checked = true;
+                radio.closest('.display-option').classList.add('selected');
+            }
+        }
+
+        document.querySelectorAll('input[name="leaderboard"]').forEach(radio => {
+            radio.addEventListener('change', function () {
+                const isEnabled = this.value === 'enabled';
+                localStorage.setItem('leaderboardEnabled', isEnabled.toString());
+                applyLeaderboardSelection(this.value);
+                showToast();
+            });
+        });
+
+        // List Grouping functionality
+        function getCurrentGrouping() {
+            return localStorage.getItem('listGroupingMode') || 'with-separators';
+        }
+
+        function applyGroupingSelection(mode) {
+            // Remove selected from listGrouping options only
+            document.querySelectorAll('input[name="listGrouping"]').forEach(radio => {
+                radio.closest('.display-option').classList.remove('selected');
+            });
+            const radio = document.querySelector(`input[name="listGrouping"][value="${mode}"]`);
+            if (radio) {
+                radio.checked = true;
+                radio.closest('.display-option').classList.add('selected');
+            }
+        }
+
+        document.querySelectorAll('input[name="listGrouping"]').forEach(radio => {
+            radio.addEventListener('change', function () {
+                localStorage.setItem('listGroupingMode', this.value);
+                applyGroupingSelection(this.value);
+                showToast();
+            });
+        });
+
+        // Init all settings on page load
+        applySelection(getCurrentMode());
+        applyGroupingSelection(getCurrentGrouping());
+        applyQuickAccessSelection(getCurrentQuickAccess());
+        applyLeaderboardSelection(getCurrentLeaderboard());
+        applyThemeSelection(getCurrentTheme());
+
+        // Theme functionality
+        function getCurrentTheme() {
+            return localStorage.getItem('appTheme') || 'dark';
+        }
+
+        function applyThemeSelection(theme) {
+            // Remove selected from theme options only
+            document.querySelectorAll('input[name="theme"]').forEach(radio => {
+                radio.closest('.display-option').classList.remove('selected');
+            });
+            const radio = document.querySelector(`input[name="theme"][value="${theme}"]`);
+            if (radio) {
+                radio.checked = true;
+                radio.closest('.display-option').classList.add('selected');
+            }
+            // Apply theme to document
+            document.documentElement.setAttribute('data-theme', theme);
+        }
+
+        document.querySelectorAll('input[name="theme"]').forEach(radio => {
+            radio.addEventListener('change', function () {
+                localStorage.setItem('appTheme', this.value);
+                applyThemeSelection(this.value);
+                showToast();
+            });
+        });
+
+        // Sync Mode functionality
+        function getCurrentSyncMode() {
+            return localStorage.getItem('backupSyncMode') || 'merge';
+        }
+
+        function applySyncModeSelection(mode) {
+            // Remove selected from syncMode options only
+            document.querySelectorAll('input[name="syncMode"]').forEach(radio => {
+                radio.closest('.display-option').classList.remove('selected');
+            });
+            const radio = document.querySelector(`input[name="syncMode"][value="${mode}"]`);
+            if (radio) {
+                radio.checked = true;
+                radio.closest('.display-option').classList.add('selected');
+            }
+        }
+
+        document.querySelectorAll('input[name="syncMode"]').forEach(radio => {
+            radio.addEventListener('change', function () {
+                localStorage.setItem('backupSyncMode', this.value);
+                applySyncModeSelection(this.value);
+                showToast();
+            });
+        });
+
+        applySyncModeSelection(getCurrentSyncMode());
+
+        // Timezone functionality
+        function getCurrentTimezone() {
+            return localStorage.getItem('appTimezone') || 'auto';
+        }
+
+        function getEffectiveTimezone() {
+            const saved = getCurrentTimezone();
+            if (saved === 'auto') {
+                return Intl.DateTimeFormat().resolvedOptions().timeZone;
+            }
+            return saved;
+        }
+
+        function updateCurrentTimeDisplay() {
+            const timezone = getEffectiveTimezone();
+            const now = new Date();
+            const formatter = new Intl.DateTimeFormat('en-US', {
+                timeZone: timezone,
+                hour: 'numeric',
+                minute: '2-digit',
+                hour12: true
+            });
+            document.getElementById('currentTimeDisplay').textContent = formatter.format(now);
+        }
+
+        function applyTimezoneSelection(timezone) {
+            const select = document.getElementById('timezoneSelect');
+            select.value = timezone;
+            
+            // Update detected timezone in auto option text
+            const detectedTZ = Intl.DateTimeFormat().resolvedOptions().timeZone;
+            const autoOption = select.querySelector('option[value="auto"]');
+            if (autoOption) {
+                autoOption.textContent = `Auto-detect (Current: ${detectedTZ})`;
+            }
+            
+            updateCurrentTimeDisplay();
+        }
+
+        document.getElementById('timezoneSelect').addEventListener('change', function() {
+            localStorage.setItem('appTimezone', this.value);
+            applyTimezoneSelection(this.value);
+            showToast();
+        });
+
+        // Initialize timezone on page load
+        applyTimezoneSelection(getCurrentTimezone());
+        
+        // Update clock every second
+        setInterval(updateCurrentTimeDisplay, 1000);
+
+        // Reset to Defaults button with custom modal
+        const resetModal = document.getElementById('resetModal');
+        const resetBtn = document.getElementById('resetToDefaults');
+        const cancelBtn = document.getElementById('cancelReset');
+        const confirmBtn = document.getElementById('confirmReset');
+
+        resetBtn.addEventListener('click', function() {
+            resetModal.classList.add('active');
+        });
+
+        cancelBtn.addEventListener('click', function() {
+            resetModal.classList.remove('active');
+        });
+
+        confirmBtn.addEventListener('click', function() {
+            // Reset Theme to dark
+            localStorage.setItem('appTheme', 'dark');
+            applyThemeSelection('dark');
+            
+            // Reset Quick Access to enabled
+            localStorage.setItem('currentlyWatchingEnabled', 'true');
+            applyQuickAccessSelection('enabled');
+            
+            // Reset Leaderboard to enabled
+            localStorage.setItem('leaderboardEnabled', 'true');
+            applyLeaderboardSelection('enabled');
+            
+            // Reset Sync Mode to Merge
+            localStorage.setItem('backupSyncMode', 'merge');
+            applySyncModeSelection('merge');
+            
+            // Reset List Grouping to with-separators
+            localStorage.setItem('listGroupingMode', 'with-separators');
+            applyGroupingSelection('with-separators');
+            
+            // Reset Poster Mode to cover
+            localStorage.setItem('posterDisplayMode', 'cover');
+            applySelection('cover');
+            
+            // Reset Timezone to auto
+            localStorage.setItem('appTimezone', 'auto');
+            applyTimezoneSelection('auto');
+            
+            resetModal.classList.remove('active');
+            showToast();
+        });
+
+        // Close modal on overlay click
+        resetModal.addEventListener('click', function(e) {
+            if (e.target === resetModal) {
+                resetModal.classList.remove('active');
+            }
+        });
+
+        // Close modal on Escape key
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape' && resetModal.classList.contains('active')) {
+                resetModal.classList.remove('active');
+            }
+        });
+    </script>
+    <script src="footer.js"></script>
+</body>
+</html>
+    <script>
+        // Hamburger menu toggle
+        document.addEventListener('DOMContentLoaded', function() {
+            const hamburger = document.getElementById('hamburger');
+            const navLinks = document.getElementById('navLinks');
+            const siteBlur = document.getElementById('siteBlur');
+            
+            if (hamburger && navLinks) {
+                hamburger.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    const isOpen = hamburger.classList.contains('open');
+                    
+                    if (isOpen) {
+                        closeMenu();
+                    } else {
+                        openMenu();
+                    }
+                });
+                
+                // Close menu when clicking blur overlay
+                if (siteBlur) {
+                    siteBlur.addEventListener('click', closeMenu);
+                }
+                
+                // Close menu when clicking outside
+                document.addEventListener('click', function(e) {
+                    if (!hamburger.contains(e.target) && !navLinks.contains(e.target)) {
+                        closeMenu();
+                    }
+                });
+                
+                // Close menu when clicking a nav link
+                navLinks.querySelectorAll('.nav-link').forEach(link => {
+                    link.addEventListener('click', function() {
+                        closeMenu();
+                    });
+                });
+                
+                // Close menu on escape key
+                document.addEventListener('keydown', function(e) {
+                    if (e.key === 'Escape' && hamburger.classList.contains('open')) {
+                        closeMenu();
+                    }
+                });
+                
+                // Menu control functions
+                function openMenu() {
+                    hamburger.classList.add('open');
+                    navLinks.classList.add('open');
+                    if (siteBlur) siteBlur.classList.add('active');
+                    hamburger.setAttribute('aria-expanded', 'true');
+                }
+                
+                function closeMenu() {
+                    hamburger.classList.remove('open');
+                    navLinks.classList.remove('open');
+                    if (siteBlur) siteBlur.classList.remove('active');
+                    hamburger.setAttribute('aria-expanded', 'false');
+                }
+            }
+        });
+    </script>
