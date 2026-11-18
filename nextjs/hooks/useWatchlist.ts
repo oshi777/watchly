@@ -253,8 +253,14 @@ export function useWatchlist() {
             }
         });
         setItems(newItems);
-        save(newItems);
-    }, [save]);
+        saveToStorage(newItems);
+        // Force immediate cloud push — don't debounce
+        if (isAuthenticated && user) {
+            syncWatchlistToCloud(user.id, newItems)
+                .then(() => refreshProfile(user.id))
+                .catch(() => {});
+        }
+    }, [saveToStorage, isAuthenticated, user, refreshProfile]);
 
     const filtered = items.filter(item => {
         const searchNoSpaces = searchTerm.toLowerCase().replace(/\s+/g, '');
