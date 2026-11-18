@@ -1,7 +1,7 @@
 import { createClient, SupabaseClient } from '@supabase/supabase-js';
 
-// Storage limit per user in bytes (50MB default)
-export const STORAGE_LIMIT = 50 * 1024 * 1024;
+// Storage limit per user in bytes (5MB)
+export const STORAGE_LIMIT = 5 * 1024 * 1024;
 
 export interface UserProfile {
     id: string;
@@ -67,17 +67,34 @@ export async function getUserProfile(userId: string): Promise<UserProfile | null
 
 export async function syncWatchlistToCloud(userId: string, watchlist: any[]) {
     const supabase = getSupabase();
+
+    // Bundle all important localStorage data
+    const payload = {
+        watchlistData: watchlist,
+        watchlistRankings: JSON.parse(localStorage.getItem('watchlistRankings') || '[]'),
+        rankings: JSON.parse(localStorage.getItem('rankings') || '[]'),
+        quickAccess: JSON.parse(localStorage.getItem('quickAccess') || '[]'),
+    };
+
+    const size = JSON.stringify(payload).length;
+
     const { data, error } = await supabase
         .from('watchlists')
         .upsert({
             user_id: userId,
-            data: watchlist,
+            data: payload,
             updated_at: new Date().toISOString(),
-            size: JSON.stringify(watchlist).length,
-        }, {
-            onConflict: 'user_id',
-        });
-    
+            size,
+        }, { onConflict: 'user_id' });
+
+    // Update storage_used in profile
+    if (!error) {
+        await supabase
+            .from('profiles')
+            .update({ storage_used: size })
+            .eq('id', userId);
+    }
+
     return { data, error };
 }
 
@@ -88,7 +105,19 @@ export async function getWatchlistFromCloud(userId: string) {
         .select('data, updated_at, size')
         .eq('user_id', userId)
         .single();
-    
+
     if (error) return null;
-    return data;
+
+    // Handle both old format (plain array) and new format (object with keys)
+    const raw = data.data;
+    if (Array.isArray(raw)) {
+        // Old format — just watchlist array
+        return { watchlistData: raw, watchlistRankings: [], rankings: [], quickAccess: [] };
+    }
+    return raw as {
+        watchlistData: any[];
+        watchlistRankings: string[];
+        rankings: string[];
+        quickAccess: any[];
+    };
 }

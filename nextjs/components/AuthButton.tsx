@@ -22,8 +22,8 @@ export default function AccountPanel() {
     }, [open]);
 
     const storageUsed = profile?.storage_used || 0;
-    const storageLimit = profile?.storage_limit || 50 * 1024 * 1024;
-    const usedMB = (storageUsed / (1024 * 1024)).toFixed(1);
+    const storageLimit = profile?.storage_limit || 5 * 1024 * 1024;
+    const usedMB = (storageUsed / (1024 * 1024)).toFixed(2);
     const limitMB = (storageLimit / (1024 * 1024)).toFixed(0);
     const pct = Math.min(100, (storageUsed / storageLimit) * 100);
 

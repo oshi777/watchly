@@ -6,7 +6,7 @@ CREATE TABLE IF NOT EXISTS profiles (
     id UUID PRIMARY KEY REFERENCES auth.users(id) ON DELETE CASCADE,
     email TEXT,
     storage_used BIGINT DEFAULT 0,
-    storage_limit BIGINT DEFAULT 52428800, -- 50MB default
+    storage_limit BIGINT DEFAULT 5242880, -- 5MB default
     created_at TIMESTAMPTZ DEFAULT NOW()
 );
 
@@ -50,7 +50,7 @@ CREATE OR REPLACE FUNCTION handle_new_user()
 RETURNS TRIGGER AS $$
 BEGIN
     INSERT INTO profiles (id, email, storage_limit)
-    VALUES (NEW.id, NEW.email, 52428800); -- 50MB
+    VALUES (NEW.id, NEW.email, 5242880); -- 5MB
     RETURN NEW;
 END;
 $$ LANGUAGE plpgsql SECURITY DEFINER;

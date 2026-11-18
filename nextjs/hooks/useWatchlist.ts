@@ -40,9 +40,8 @@ export function useWatchlist() {
         cloudLoadedRef.current = true;
 
         getWatchlistFromCloud(user.id).then(cloudData => {
-            if (cloudData?.data && Array.isArray(cloudData.data) && cloudData.data.length > 0) {
-                // Cloud has data — use it and overwrite local
-                const data: WatchlistItem[] = cloudData.data;
+            if (cloudData?.watchlistData && Array.isArray(cloudData.watchlistData) && cloudData.watchlistData.length > 0) {
+                const data: WatchlistItem[] = cloudData.watchlistData;
                 data.forEach((item, i) => {
                     if (!item.id) item.id = 'item_' + Date.now() + '_' + i;
                     if (!item.section) {
@@ -51,9 +50,18 @@ export function useWatchlist() {
                     }
                 });
                 localStorage.setItem('watchlistData', JSON.stringify(data));
+                // Restore rankings and quick access
+                if (cloudData.watchlistRankings?.length) {
+                    localStorage.setItem('watchlistRankings', JSON.stringify(cloudData.watchlistRankings));
+                }
+                if (cloudData.rankings?.length) {
+                    localStorage.setItem('rankings', JSON.stringify(cloudData.rankings));
+                }
+                if (cloudData.quickAccess?.length) {
+                    localStorage.setItem('quickAccess', JSON.stringify(cloudData.quickAccess));
+                }
                 setItems(data);
             } else {
-                // No cloud data yet — push local data up
                 const local: WatchlistItem[] = JSON.parse(localStorage.getItem('watchlistData') || '[]');
                 if (local.length > 0) {
                     syncWatchlistToCloud(user.id, local).catch(() => {});
