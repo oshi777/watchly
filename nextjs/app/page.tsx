@@ -57,6 +57,22 @@ export default function HomePage() {
             try {
                 const importedData = JSON.parse(event.target?.result as string);
                 if (confirm('This will replace your current watchlist and rankings. Continue?')) {
+                    // Write all keys directly to localStorage before calling importData
+                    if (importedData.leaderboardRankings?.length) {
+                        localStorage.setItem('rankings', JSON.stringify(importedData.leaderboardRankings));
+                    }
+                    if (importedData.quickAccess?.length) {
+                        const qa = importedData.quickAccess.map((id: any) =>
+                            typeof id === 'string' ? { itemId: id } : id
+                        );
+                        localStorage.setItem('quickAccess', JSON.stringify(qa));
+                    }
+                    if (importedData.rankings?.length) {
+                        const rankingIds = importedData.rankings.map((r: any) =>
+                            typeof r === 'string' ? r : r.id
+                        );
+                        localStorage.setItem('watchlistRankings', JSON.stringify(rankingIds));
+                    }
                     importData(importedData);
                 }
             } catch {
