@@ -252,15 +252,24 @@ export function useWatchlist() {
                 item.section = /[0-9]/.test(c) ? '0-9' : c;
             }
         });
+        // Save to localStorage first
+        localStorage.setItem('watchlistData', JSON.stringify(newItems));
         setItems(newItems);
-        saveToStorage(newItems);
-        // Force immediate cloud push — don't debounce
+
+        // Push to cloud immediately, then reload so cloud pull gets the new data
         if (isAuthenticated && user) {
             syncWatchlistToCloud(user.id, newItems)
-                .then(() => refreshProfile(user.id))
-                .catch(() => {});
+                .then(() => {
+                    refreshProfile(user.id);
+                    window.location.reload();
+                })
+                .catch(() => {
+                    window.location.reload();
+                });
+        } else {
+            window.location.reload();
         }
-    }, [saveToStorage, isAuthenticated, user, refreshProfile]);
+    }, [isAuthenticated, user, refreshProfile]);
 
     const filtered = items.filter(item => {
         const searchNoSpaces = searchTerm.toLowerCase().replace(/\s+/g, '');
