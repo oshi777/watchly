@@ -232,59 +232,20 @@ export function useWatchlist() {
         }
     }, [isAuthenticated, user]);
 
-    const importData = useCallback((data: any) => {
-        let newItems: WatchlistItem[] = [];
-        if (Array.isArray(data)) {
-            newItems = data;
-        } else if (data.watchlistData) {
-            newItems = data.watchlistData;
-            if (data.rankings) {
-                const rankings = data.rankings;
-                let rankingIds: string[] = [];
-                if (rankings.length > 0) {
-                    if (typeof rankings[0] === 'string') {
-                        rankingIds = rankings;
-                    } else if (rankings[0].id) {
-                        rankingIds = rankings.map((r: any) => r.id);
-                    }
-                }
-                localStorage.setItem('watchlistRankings', JSON.stringify(rankingIds));
-            }
-            // Restore leaderboard rankings from vanilla export
-            if (data.leaderboardRankings?.length) {
-                localStorage.setItem('rankings', JSON.stringify(data.leaderboardRankings));
-            }
-            // Restore pinned items — vanilla uses quickAccess array of IDs
-            if (data.quickAccess?.length) {
-                // Convert plain ID array to {itemId} objects used by Next.js
-                const qa = data.quickAccess.map((id: any) =>
-                    typeof id === 'string' ? { itemId: id } : id
-                );
-                localStorage.setItem('quickAccess', JSON.stringify(qa));
-            }
-        }
-        newItems.forEach((item, i) => {
-            if (!item.id) item.id = 'item_' + Date.now() + '_' + i;
-            if (!item.section) {
-                const c = item.title.charAt(0).toUpperCase();
-                item.section = /[0-9]/.test(c) ? '0-9' : c;
-            }
-        });
-        // Save to localStorage first
-        localStorage.setItem('watchlistData', JSON.stringify(newItems));
+    const importData = useCallback((watchlistItems: WatchlistItem[]) => {
+        // Just set the watchlist items and push to cloud
+        // All other localStorage keys (rankings, quickAccess) are written by handleImport in page.tsx
+        setItems(watchlistItems);
+        localStorage.setItem('watchlistData', JSON.stringify(watchlistItems));
         localStorage.setItem('justImported', 'true');
-        setItems(newItems);
 
-        // Push to cloud immediately, then reload so cloud pull gets the new data
         if (isAuthenticated && user) {
-            syncWatchlistToCloud(user.id, newItems)
+            syncWatchlistToCloud(user.id, watchlistItems)
                 .then(() => {
                     refreshProfile(user.id);
                     window.location.reload();
                 })
-                .catch(() => {
-                    window.location.reload();
-                });
+                .catch(() => window.location.reload());
         } else {
             window.location.reload();
         }

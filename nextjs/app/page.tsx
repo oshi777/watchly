@@ -57,28 +57,48 @@ export default function HomePage() {
         const reader = new FileReader();
         reader.onload = (event) => {
             try {
-                const importedData = JSON.parse(event.target?.result as string);
-                if (confirm('This will replace your current watchlist and rankings. Continue?')) {
-                    // Write all keys directly to localStorage before calling importData
-                    if (importedData.leaderboardRankings?.length) {
-                        localStorage.setItem('rankings', JSON.stringify(importedData.leaderboardRankings));
-                    }
-                    if (importedData.quickAccess?.length) {
-                        const qa = importedData.quickAccess.map((id: any) =>
-                            typeof id === 'string' ? { itemId: id } : id
-                        );
-                        localStorage.setItem('quickAccess', JSON.stringify(qa));
-                    }
-                    if (importedData.rankings?.length) {
-                        const rankingIds = importedData.rankings.map((r: any) =>
-                            typeof r === 'string' ? r : r.id
-                        );
-                        localStorage.setItem('watchlistRankings', JSON.stringify(rankingIds));
-                    }
-                    importData(importedData);
+                const d = JSON.parse(event.target?.result as string);
+                if (!confirm('This will replace your current watchlist. Continue?')) return;
+
+                // 1. Parse watchlist items
+                let watchlistItems: WatchlistItem[] = [];
+                if (Array.isArray(d)) {
+                    watchlistItems = d;
+                } else if (d.watchlistData) {
+                    watchlistItems = d.watchlistData;
                 }
+                watchlistItems.forEach((item: any, i: number) => {
+                    if (!item.id) item.id = 'item_' + Date.now() + '_' + i;
+                    if (!item.section) {
+                        const c = item.title?.charAt(0).toUpperCase() || 'A';
+                        item.section = /[0-9]/.test(c) ? '0-9' : c;
+                    }
+                });
+
+                // 2. Write watchlist rankings (from 'rankings' key — array of {id, title} objects)
+                if (d.rankings?.length) {
+                    const ids = d.rankings.map((r: any) => typeof r === 'string' ? r : r.id).filter(Boolean);
+                    localStorage.setItem('watchlistRankings', JSON.stringify(ids));
+                }
+
+                // 3. Write leaderboard rankings (from 'leaderboardRankings' key — array of ID strings)
+                if (d.leaderboardRankings?.length) {
+                    localStorage.setItem('rankings', JSON.stringify(d.leaderboardRankings));
+                }
+
+                // 4. Write pinned quick access (from 'quickAccess' key)
+                if (d.quickAccess?.length) {
+                    const qa = d.quickAccess.map((entry: any) =>
+                        typeof entry === 'string' ? { itemId: entry } : entry
+                    );
+                    localStorage.setItem('quickAccess', JSON.stringify(qa));
+                }
+
+                // 5. Hand off watchlist items to hook — it writes watchlistData, sets justImported, syncs to cloud, reloads
+                importData(watchlistItems);
+
             } catch {
-                alert('Invalid file format. Please select a valid JSON file.');
+                alert('Invalid file format.');
             }
         };
         reader.readAsText(file);
