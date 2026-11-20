@@ -81,9 +81,18 @@ export default function HomePage() {
                     localStorage.setItem('watchlistRankings', JSON.stringify(ids));
                 }
 
-                // 3. Write leaderboard rankings (from 'leaderboardRankings' key — array of ID strings)
+                // 3. Write leaderboard rankings
+                // Try leaderboardRankings key first (new format), fall back to checking rankings for ID strings
                 if (d.leaderboardRankings?.length) {
                     localStorage.setItem('rankings', JSON.stringify(d.leaderboardRankings));
+                } else if (d.rankings?.length) {
+                    // Some exports store LB as plain ID strings in 'rankings'
+                    const firstItem = d.rankings[0];
+                    if (typeof firstItem === 'string') {
+                        // Plain ID array — this IS the leaderboard
+                        localStorage.setItem('rankings', JSON.stringify(d.rankings));
+                    }
+                    // else it's {id, title} objects which are watchlistRankings, already handled above
                 }
 
                 // 4. Write pinned quick access (from 'quickAccess' key)
