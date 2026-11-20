@@ -76,23 +76,19 @@ export default function HomePage() {
                 });
 
                 // 2. Write watchlist rankings (from 'rankings' key — array of {id, title} objects)
+                // Also use these as leaderboard rankings since vanilla used one key for both
                 if (d.rankings?.length) {
                     const ids = d.rankings.map((r: any) => typeof r === 'string' ? r : r.id).filter(Boolean);
                     localStorage.setItem('watchlistRankings', JSON.stringify(ids));
+                    // Vanilla had no separate LB key — use same IDs for leaderboard
+                    if (!d.leaderboardRankings?.length) {
+                        localStorage.setItem('rankings', JSON.stringify(ids));
+                    }
                 }
 
-                // 3. Write leaderboard rankings
-                // Try leaderboardRankings key first (new format), fall back to checking rankings for ID strings
+                // 3. Write leaderboard rankings (new site format — overrides above if present)
                 if (d.leaderboardRankings?.length) {
                     localStorage.setItem('rankings', JSON.stringify(d.leaderboardRankings));
-                } else if (d.rankings?.length) {
-                    // Some exports store LB as plain ID strings in 'rankings'
-                    const firstItem = d.rankings[0];
-                    if (typeof firstItem === 'string') {
-                        // Plain ID array — this IS the leaderboard
-                        localStorage.setItem('rankings', JSON.stringify(d.rankings));
-                    }
-                    // else it's {id, title} objects which are watchlistRankings, already handled above
                 }
 
                 // 4. Write pinned quick access (from 'quickAccess' key)
