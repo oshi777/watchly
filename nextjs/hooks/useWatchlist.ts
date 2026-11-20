@@ -87,7 +87,7 @@ export function useWatchlist() {
         localStorage.setItem('watchlistData', JSON.stringify(newItems));
     }, []);
 
-    // Debounced cloud sync — fires 1.5s after last change
+    // Debounced cloud sync — fires 800ms after last change
     const scheduleSyncToCloud = useCallback((newItems: WatchlistItem[]) => {
         if (!isAuthenticated || !user) return;
         if (syncTimerRef.current) clearTimeout(syncTimerRef.current);
@@ -95,7 +95,7 @@ export function useWatchlist() {
             syncWatchlistToCloud(user.id, newItems)
                 .then(() => refreshProfile(user.id))
                 .catch(() => {});
-        }, 1500);
+        }, 800);
     }, [isAuthenticated, user, refreshProfile]);
 
     const save = useCallback((newItems: WatchlistItem[]) => {

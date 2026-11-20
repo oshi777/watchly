@@ -26,6 +26,9 @@ export function getSupabase(): SupabaseClient {
             autoRefreshToken: true,
         },
     });
+
+    // Warm up the connection immediately so first real query is fast
+    supabaseInstance.from('profiles').select('id').limit(1).then(() => {}).catch(() => {});
     
     return supabaseInstance;
 }
