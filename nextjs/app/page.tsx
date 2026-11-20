@@ -39,6 +39,15 @@ export default function HomePage() {
             rankings: rankingsWithNames,
             leaderboardRankings: JSON.parse(localStorage.getItem('rankings') || '[]'),
             quickAccess: JSON.parse(localStorage.getItem('quickAccess') || '[]'),
+            settings: {
+                theme: localStorage.getItem('theme') || 'dark',
+                posterDisplayMode: localStorage.getItem('posterDisplayMode') || 'cover',
+                listGroupingMode: localStorage.getItem('listGroupingMode') || 'with-separators',
+                quickAccessEnabled: localStorage.getItem('quickAccessEnabled') || 'true',
+                leaderboardEnabled: localStorage.getItem('leaderboardEnabled') || 'true',
+                syncMode: localStorage.getItem('syncMode') || 'merge',
+                appTimezone: localStorage.getItem('appTimezone') || 'auto',
+            },
             timestamp: new Date().toISOString()
         };
         const data = JSON.stringify(exportData, null, 2);
@@ -99,7 +108,19 @@ export default function HomePage() {
                     localStorage.setItem('quickAccess', JSON.stringify(qa));
                 }
 
-                // 5. Hand off watchlist items to hook — it writes watchlistData, sets justImported, syncs to cloud, reloads
+                // 5. Restore settings if present
+                if (d.settings) {
+                    const s = d.settings;
+                    if (s.theme) { localStorage.setItem('theme', s.theme); document.documentElement.setAttribute('data-theme', s.theme); }
+                    if (s.posterDisplayMode) localStorage.setItem('posterDisplayMode', s.posterDisplayMode);
+                    if (s.listGroupingMode) localStorage.setItem('listGroupingMode', s.listGroupingMode);
+                    if (s.quickAccessEnabled !== undefined) localStorage.setItem('quickAccessEnabled', String(s.quickAccessEnabled));
+                    if (s.leaderboardEnabled !== undefined) localStorage.setItem('leaderboardEnabled', String(s.leaderboardEnabled));
+                    if (s.syncMode) localStorage.setItem('syncMode', s.syncMode);
+                    if (s.appTimezone) localStorage.setItem('appTimezone', s.appTimezone);
+                }
+
+                // 6. Hand off watchlist items to hook — it writes watchlistData, sets justImported, syncs to cloud, reloads
                 importData(watchlistItems);
 
             } catch {

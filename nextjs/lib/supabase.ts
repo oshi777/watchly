@@ -71,12 +71,21 @@ export async function getUserProfile(userId: string): Promise<UserProfile | null
 export async function syncWatchlistToCloud(userId: string, watchlist: any[]) {
     const supabase = getSupabase();
 
-    // Bundle all important localStorage data
+    // Bundle all important localStorage data including settings
     const payload = {
         watchlistData: watchlist,
         watchlistRankings: JSON.parse(localStorage.getItem('watchlistRankings') || '[]'),
         rankings: JSON.parse(localStorage.getItem('rankings') || '[]'),
         quickAccess: JSON.parse(localStorage.getItem('quickAccess') || '[]'),
+        settings: {
+            theme: localStorage.getItem('theme') || 'dark',
+            posterDisplayMode: localStorage.getItem('posterDisplayMode') || 'cover',
+            listGroupingMode: localStorage.getItem('listGroupingMode') || 'with-separators',
+            quickAccessEnabled: localStorage.getItem('quickAccessEnabled') || 'true',
+            leaderboardEnabled: localStorage.getItem('leaderboardEnabled') || 'true',
+            syncMode: localStorage.getItem('syncMode') || 'merge',
+            appTimezone: localStorage.getItem('appTimezone') || 'auto',
+        },
     };
 
     const size = JSON.stringify(payload).length;
@@ -122,5 +131,14 @@ export async function getWatchlistFromCloud(userId: string) {
         watchlistRankings: string[];
         rankings: string[];
         quickAccess: any[];
+        settings?: {
+            theme?: string;
+            posterDisplayMode?: string;
+            listGroupingMode?: string;
+            quickAccessEnabled?: string;
+            leaderboardEnabled?: string;
+            syncMode?: string;
+            appTimezone?: string;
+        };
     };
 }

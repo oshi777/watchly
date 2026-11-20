@@ -66,6 +66,17 @@ export function useWatchlist() {
                 if (cloudData.quickAccess?.length) {
                     localStorage.setItem('quickAccess', JSON.stringify(cloudData.quickAccess));
                 }
+                // Restore settings
+                if (cloudData.settings) {
+                    const s = cloudData.settings;
+                    if (s.theme) { localStorage.setItem('theme', s.theme); document.documentElement.setAttribute('data-theme', s.theme); }
+                    if (s.posterDisplayMode) localStorage.setItem('posterDisplayMode', s.posterDisplayMode);
+                    if (s.listGroupingMode) localStorage.setItem('listGroupingMode', s.listGroupingMode);
+                    if (s.quickAccessEnabled !== undefined) localStorage.setItem('quickAccessEnabled', s.quickAccessEnabled);
+                    if (s.leaderboardEnabled !== undefined) localStorage.setItem('leaderboardEnabled', s.leaderboardEnabled);
+                    if (s.syncMode) localStorage.setItem('syncMode', s.syncMode);
+                    if (s.appTimezone) localStorage.setItem('appTimezone', s.appTimezone);
+                }
                 setItems(data);
             } else {
                 const local: WatchlistItem[] = JSON.parse(localStorage.getItem('watchlistData') || '[]');
