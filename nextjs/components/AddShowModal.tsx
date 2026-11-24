@@ -107,7 +107,7 @@ export default function AddShowModal({ onClose, onAdd, editItem, onEdit }: AddSh
             }
             if (detail.overview) {
                 setSelectedOverview(detail.overview);
-                setNote(detail.overview);
+                // Don't auto-fill notes with overview — keep notes empty
             }
         } catch (e) {
             // Ignore detail fetch errors
