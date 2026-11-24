@@ -28,7 +28,7 @@ export function getSupabase(): SupabaseClient {
     });
 
     // Warm up the connection immediately so first real query is fast
-    supabaseInstance.from('profiles').select('id').limit(1).then(() => {}).catch(() => {});
+    supabaseInstance.from('profiles').select('id').limit(1).then(() => {}, () => {});
     
     return supabaseInstance;
 }
