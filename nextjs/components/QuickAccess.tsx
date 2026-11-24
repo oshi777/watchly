@@ -129,17 +129,6 @@ export default function QuickAccess({ items, onItemClick }: QuickAccessProps) {
                                                     {item.year && <span style={{fontSize: '0.65rem', color: 'rgba(255,255,255,0.6)'}}>{item.year}</span>}
                                                 </div>
                                             </div>
-                                            <button
-                                                onClick={(e) => { e.stopPropagation(); removeFromQuickAccess(item.id); }}
-                                                style={{
-                                                    position: 'absolute', top: '6px', right: '6px',
-                                                    background: 'rgba(0,0,0,0.7)', color: '#fff',
-                                                    border: 'none', borderRadius: '50%',
-                                                    width: '24px', height: '24px', cursor: 'pointer',
-                                                    fontSize: '0.8rem', display: 'flex',
-                                                    alignItems: 'center', justifyContent: 'center',
-                                                }}
-                                            >×</button>
                                         </div>
                                     ) : (
                                         <div className="currently-watching-item" style={{padding: 0, overflow: 'hidden', position: 'relative', aspectRatio: '2/3', cursor: 'pointer', borderRadius: '12px', background: 'linear-gradient(135deg, #222326 0%, #2a2d35 50%, #222326 100%)'}}>
@@ -152,17 +141,6 @@ export default function QuickAccess({ items, onItemClick }: QuickAccessProps) {
                                                     <span className={`item-poster-status ${statusClass}`} style={{fontSize: '0.6rem'}}>{statusLabels[item.status]}</span>
                                                 </div>
                                             </div>
-                                            <button
-                                                onClick={(e) => { e.stopPropagation(); removeFromQuickAccess(item.id); }}
-                                                style={{
-                                                    position: 'absolute', top: '6px', right: '6px',
-                                                    background: 'rgba(0,0,0,0.7)', color: '#fff',
-                                                    border: 'none', borderRadius: '50%',
-                                                    width: '24px', height: '24px', cursor: 'pointer',
-                                                    fontSize: '0.8rem', display: 'flex',
-                                                    alignItems: 'center', justifyContent: 'center',
-                                                }}
-                                            >×</button>
                                         </div>
                                     )}
                                 </div>

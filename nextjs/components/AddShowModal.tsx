@@ -36,10 +36,11 @@ export default function AddShowModal({ onClose, onAdd, editItem, onEdit }: AddSh
             setStatus(editItem.status);
             setGenres(editItem.genres.join(', '));
             setNote(editItem.note || '');
+            // Don't load overview into notes — keep them separate
+            setSelectedOverview(editItem.overview || editItem.note || '');
             setYear(editItem.year || '');
             setIsMovie(editItem.isMovie || false);
             setSelectedPoster(editItem.poster || null);
-            setSelectedOverview(editItem.overview || '');
 
             // Handle date
             if (editItem.date && editItem.status === 'watched') {
@@ -234,6 +235,20 @@ export default function AddShowModal({ onClose, onAdd, editItem, onEdit }: AddSh
                         )}
                     </div>
                     <input type="number" placeholder="Release Year (optional)" min="1900" max="2030" value={year} onChange={(e) => setYear(e.target.value)} />
+                    {selectedOverview && (
+                        <div style={{
+                            padding: '10px 12px',
+                            background: 'rgba(195,199,206,0.05)',
+                            border: '1px solid rgba(195,199,206,0.1)',
+                            borderRadius: '8px',
+                            color: 'var(--silver)',
+                            fontSize: '0.82rem',
+                            lineHeight: '1.6',
+                        }}>
+                            <div style={{ color: 'var(--light)', fontSize: '0.72rem', fontWeight: '600', marginBottom: '5px', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Description</div>
+                            {selectedOverview}
+                        </div>
+                    )}
                     <input type="text" placeholder="Notes (optional)" value={note} onChange={(e) => setNote(e.target.value)} />
                     <label>
                         <input type="checkbox" checked={isMovie} onChange={(e) => setIsMovie(e.target.checked)} />
